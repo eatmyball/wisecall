@@ -1,0 +1,277 @@
+<!--
+  Generated template for the TaskListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar hideBackButton="true">
+    <button ion-button icon-only menuToggle="left">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>运送</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content>
+  <!--下拉刷新控件-->
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="ios-arrow-dropdown-circle" pullingText="下拉刷新" refreshingSpinner="crescent"
+      refreshingText="努力加载中...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-grid class="gird-main">
+    <ion-row class="item-row">
+      <ion-col col-6 class="col-detail right">
+
+        <!--类型为病人运送-->
+        <div class="div-block-bottom-border">
+          <ion-label>病人运送</ion-label>
+          <div>
+            <ion-row>
+              <ion-col col-6>
+                <ion-item>
+                  <ion-label>床号</ion-label>
+                  <ion-input type="text" placeholder="请输入病人床号"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col col-6>
+                <ion-item>
+                  <ion-label>姓名</ion-label>
+                  <ion-input type="text" placeholder="请输入病人姓名"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <div class="div-checkbox-container">
+              <ion-label style="padding:5px 8px 0px 16px;font-size:1.7rem;">检查项目</ion-label>
+
+              <div style="display: flex; align-items: center;flex-wrap: wrap;">
+                <div class="div-checkbox-item">
+
+                  <ion-item no-lines>
+                    <ion-label>MIR</ion-label>
+                    <ion-checkbox></ion-checkbox>
+                  </ion-item>
+                </div>
+
+                <div class="div-checkbox-item">
+
+                  <ion-item no-lines>
+                    <ion-label>CT</ion-label>
+                    <ion-checkbox></ion-checkbox>
+                  </ion-item>
+                </div>
+
+                <div class="div-checkbox-item">
+
+                  <ion-item no-lines>
+                    <ion-label>超声医学科</ion-label>
+                    <ion-checkbox></ion-checkbox>
+                  </ion-item>
+                </div>
+              </div>
+              <div *ngIf="isShowMoreOption" style="display: flex; align-items: center;flex-wrap: wrap;">
+                <div class="div-checkbox-item" *ngFor="let item of checkOptionArray">
+
+                  <ion-item no-lines>
+                    <ion-label>{{item}}</ion-label>
+                    <ion-checkbox></ion-checkbox>
+                  </ion-item>
+                </div>
+
+              </div>
+              <button ion-button small (click)="onMoreOptionClicked()" class="btn_more">{{btn_check_text}}</button>
+            </div>
+
+            <ion-row>
+              <ion-col col-6>
+                <ion-item>
+                  <ion-label>运送工具</ion-label>
+                  <ion-select [(ngModel)]="transportOption" okText="确定" cancelText="取消">
+                    <ion-option value="轮椅">轮椅</ion-option>
+                    <ion-option value="平车">平车</ion-option>
+                    <ion-option value="拉床">拉床</ion-option>
+                    <ion-option value="步行">步行</ion-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col col-6>
+                <ion-item>
+                  <ion-label>检查时间</ion-label>
+                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"></ion-datetime>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-6>
+                  <ion-item>
+                      <ion-label>备注</ion-label>
+                      <ion-input type="text" [(ngModel)]="comments" placeholder="请输入备注"></ion-input>
+                    </ion-item>
+              </ion-col>
+              <ion-col col-6>
+                  <button ion-button (click)="onTaskCreate()">提交</button>
+                </ion-col>
+            </ion-row>
+          </div>
+        </div>
+        <!--类型为标本运送-->
+        <div class="div-block-bottom-border">
+          <ion-label>标本运送</ion-label>
+            <button ion-button (click)="onSpecimenTransport()">提交</button>
+        </div>
+        <!--类型为药品运送-->
+        <div class="div-block-bottom-border">
+          <ion-label>药品运送</ion-label>
+          <div>
+            <ion-row>
+              <ion-col col-6>
+                <ion-item>
+                  <ion-label>预约时间</ion-label>
+                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"></ion-datetime>
+                </ion-item>
+              </ion-col>
+              <ion-col col-6>
+                <ion-item>
+                  <ion-label>药房</ion-label>
+                  <ion-select [(ngModel)]="drugOption">
+                    <ion-option value="急诊药">急诊药</ion-option>
+                    <ion-option value="常规药">常规药</ion-option>
+                    <ion-option value="夜间急诊药">夜间急诊药</ion-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+              <button ion-button (click)="onTaskCreate()">提交</button>
+          </div>
+        </div>
+        <!--类型为物品运送-->
+        <div class="div-block-bottom-border">
+          <ion-label>物品运送</ion-label>
+          <div>
+            <ion-row>
+              <ion-col col-6>
+                <ion-item>
+                  <ion-label>预约时间</ion-label>
+                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"></ion-datetime>
+                </ion-item>
+              </ion-col>
+              <ion-col col-6>
+                <ion-item>
+                  <ion-label>送达科室</ion-label>
+                  <ion-select [(ngModel)]="drugOption">
+                    <ion-option value="氧气站">氧气站</ion-option>
+                    <ion-option value="信息科">信息科</ion-option>
+                    <ion-option value="设备科">设备科</ion-option>
+                    <ion-option value="设备科">机修组</ion-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <div class="div-checkbox-container">
+              <ion-label style="padding:5px 8px 0px 16px;font-size:1.7rem;">运送物品</ion-label>
+
+              <div style="display: flex; align-items: center;flex-wrap: wrap;">
+                <div class="div-checkbox-item">
+
+                  <ion-item no-lines>
+                    <ion-label>氧气</ion-label>
+                    <ion-checkbox></ion-checkbox>
+                  </ion-item>
+                </div>
+
+                <div class="div-checkbox-item">
+
+                  <ion-item no-lines>
+                    <ion-label>PDA</ion-label>
+                    <ion-checkbox></ion-checkbox>
+                  </ion-item>
+                </div>
+
+                <div class="div-checkbox-item">
+
+                  <ion-item no-lines>
+                    <ion-label>温仪</ion-label>
+                    <ion-checkbox></ion-checkbox>
+                  </ion-item>
+                </div>
+              </div>
+              <div *ngIf="isShowMoreCommodity" style="display: flex; align-items: center;flex-wrap: wrap;">
+                <div class="div-checkbox-item" *ngFor="let item of commodityArray">
+
+                  <ion-item no-lines>
+                    <ion-label>{{item}}</ion-label>
+                    <ion-checkbox></ion-checkbox>
+                  </ion-item>
+                </div>
+
+              </div>
+              <button ion-button small (click)="onMoreCommodityClicked()" class="btn_more">{{btn_commodity_text}}</button>
+            </div>
+              <button ion-button (click)="onTaskCreate()">提交</button>
+
+          </div>
+        </div>
+      </ion-col>
+
+      <ion-col col-6 class="col-list">
+        <ion-label>任务追踪</ion-label>
+        <ion-segment [(ngModel)]="segSelect">
+          <ion-segment-button value="DOING">
+            进行中
+          </ion-segment-button>
+          <ion-segment-button value="DONE">
+            已完成
+          </ion-segment-button>
+        </ion-segment>
+
+        <div>
+          <ion-card padding>
+            <div class="ion-card-content">
+              <ion-list no-lines>
+                <ion-item>
+                  <ion-label>
+                    23病区->药房仓库
+                  </ion-label>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>
+                    类型：物资运送-临时取药
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    2018-11-10 19:20
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+
+              <div class="div-action-bar">
+                <div class="div-action-red" *ngIf="true">
+                  <ion-icon name="ios-notifications" color="text-white"></ion-icon>
+                  <p style="color: #fff; margin-top: 5px">催单</p>
+                </div>
+
+                <div class="div-action-blue" *ngIf="true">
+                  <ion-icon name="ios-undo" color="text-white"></ion-icon>
+                  <p style="color: #fff; margin-top: 5px">取消</p>
+                </div>
+
+              </div>
+
+            </div>
+          </ion-card>
+        </div>
+
+        <!-- 上拉加载更多 -->
+        <ion-infinite-scroll (ionInfinite)="doLoading($event)">
+          <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="努力加载中..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
