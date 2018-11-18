@@ -8,6 +8,9 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { UtilityProvider } from '../providers/utility/utility';
 import { ApiProvider } from '../providers/api/api';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +28,6 @@ import { ApiProvider } from '../providers/api/api';
       scrollAssist: true,
       autoFocusAssit: false
     }),
-    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -37,7 +39,9 @@ import { ApiProvider } from '../providers/api/api';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UtilityProvider,
-    ApiProvider
+    ApiProvider,
+    PhotoViewer,
+    Camera
   ]
 })
 export class AppModule {}

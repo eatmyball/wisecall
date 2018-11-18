@@ -19,7 +19,7 @@ export class ApiProvider {
 
   public Post(url: string, data: any) {
     let urlAddress = url;
-    return this.HttpRequest({
+    return this.httpRequest({
       type: "post", data: {
         url: urlAddress,
         data: data
@@ -28,7 +28,7 @@ export class ApiProvider {
   }
   public Get(url: string, data) {
 
-    return this.HttpRequest(
+    return this.httpRequest(
       {
         type: "get",
         data: {
@@ -39,7 +39,7 @@ export class ApiProvider {
       });
   }
   public DELETE(url: string, data) {
-    return this.HttpRequest(
+    return this.httpRequest(
       {
         type: "delete",
         data: {
@@ -50,7 +50,7 @@ export class ApiProvider {
       });
   }
   public PUT(url, data) {
-    return this.HttpRequest(
+    return this.httpRequest(
       {
         type: "put",
         data: {
@@ -61,7 +61,11 @@ export class ApiProvider {
       });
   }
 
-  private HttpRequest({ type, data }) {
+  public uploadFile(url, ) {
+
+  }
+
+  private httpRequest({ type, data }) {
 
     return this.dataCode(type, data)
       .then(({ url, fomtData }) => {

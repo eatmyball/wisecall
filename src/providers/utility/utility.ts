@@ -2,19 +2,25 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastController, LoadingController, Loading } from 'ionic-angular';
 
+import { Camera, CameraOptions } from '@ionic-native/camera';
+
 /*
   Generated class for the UtilityProvider provider.
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
+
 @Injectable()
 export class UtilityProvider {
 
   myLoading: Loading;
   isLoadingShow: boolean = false;
 
-  constructor(private toastCtrl: ToastController, private loadingCtrl: LoadingController) {
+  constructor(private toastCtrl: ToastController, 
+    private loadingCtrl: LoadingController,
+    private camera:Camera
+    ) {
     console.log('Hello UtilityProvider Provider');
   }
 
@@ -77,11 +83,11 @@ export class UtilityProvider {
   /**
    * 获取相册图片
    */
-  getPictureFromGallery(): Promise<Object> {
+  getPictureFromGallery(): Promise<Object[]> {
     return new Promise((resolve, reject) => {
       let args = {
         'selectMode': 100, //101=picker image and video , 100=image , 102=video
-        'maxSelectCount': 5, //default 40 (Optional)
+        'maxSelectCount': 4, //default 40 (Optional)
         'maxSelectSize': 52428800, //50M (Optional)
       };
       (<any>window).MediaPicker.getMedias(args, (medias => {
@@ -89,6 +95,23 @@ export class UtilityProvider {
           reject('请选择一张图片上传');
         }
         //[{mediaType: "image", path:'/storage/emulated/0/DCIM/Camera/2017.jpg', uri:"android retrun uri,ios retrun URL" size: 21993}]
+        // let data = [];
+        // for(let index in medias){
+        //   let item = medias[index];
+        //   if(item.size > MAX_IMG_SIZE) {
+        //     item.quality = 90;
+        //     this.compressImage(item).then(data=>{
+        //       console.log('compress img:'+JSON.stringify(data));
+        //     });
+
+           
+            
+        //     // data.push();
+        //   }else {
+        //     item.quality = 100;
+        //     data.push(item);
+        //   }
+        // }
         resolve(medias);
       }))
     });
@@ -98,7 +121,7 @@ export class UtilityProvider {
    * 压缩图片
    * @param Media 
    */
-  compressImage(Media): Promise<Object> {
+  compressImage(Media) {
     return new Promise((resolve, reject) => {
       (<any>window).MediaPicker.compressImage(Media, (data) => {
         resolve(data);
@@ -116,6 +139,30 @@ export class UtilityProvider {
         resolve(data);
       });
     });
+  }
+
+  takePhoto():Promise<string> {
+
+    return new Promise((resovle, reject)=>{
+      const CAMERA_OPTIONS: CameraOptions = {
+        quality: 100,
+        destinationType: this.camera.DestinationType.FILE_URI,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE
+      }
+  
+      this.camera.getPicture(CAMERA_OPTIONS).then((imageData) => {
+        if(imageData) {
+          let result = (<string>imageData);
+          result = result.slice(7, result.length);
+          console.log('take Photo:'+result);
+          resovle(result);
+        }
+       }, (err) => {
+          reject(err);
+       });
+    });
+    
   }
 
 }
