@@ -1,5 +1,6 @@
 page-task-list {
   .gird-main {
+    // margin: 0px 1px;
     width: 100%;
     height: 100%;
     display: flex;
@@ -8,10 +9,24 @@ page-task-list {
       width: 50%;
       height: 100%;
       padding: 10px;
-
-      .ion-card-content {
-        position: relative;
+      .my-list-scroll{
+        width:100%;
+        height:95%;
+        margin-top:2px;
       }
+
+      .div-list-content{
+        padding: 3px;
+
+        .ion-card-content {
+          position: relative;
+          padding: 10px;
+          margin: 10px 5px;
+          box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      
     }
 
     .div-action-bar {
@@ -19,15 +34,15 @@ page-task-list {
       top: 50%;
       right: 0%;
       margin-right: 10px;
-      margin-top: -35px;
+      margin-top: -20px;
       display: flex;
       align-items: center;
     }
 
     .div-action-red {
-      width: 45px;
-      height: 45px;
-      padding: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 3px;
       margin: 5px;
       display: flex;
       flex-direction: column;
@@ -36,12 +51,15 @@ page-task-list {
       border-radius: 50%;
       background-color: #ED4249;
       box-shadow: 1px 1px 4px #333;
+      color: #fff; 
+      margin-top: 1px;
+      font-size: 1.2rem !important;
     }
 
     .div-action-blue {
-      width: 45px;
-      height: 45px;
-      padding: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 3px;
       margin: 5px;
       display: flex;
       flex-direction: column;
@@ -50,12 +68,17 @@ page-task-list {
       border-radius: 50%;
       background-color: #0077C8;
       box-shadow: 1px 1px 4px #333;
+      color: #fff; 
+      margin-top: 1px;
+      font-size: 1.2rem !important;
     }
 
     .col-detail {
       width: 50%;
       height: 100%;
       padding: 10px;
+      border-right: 1px solid #e0e0e0;
+      // margin: 0px 1px;
       .div-item-row{
         display: flex;
         padding:1px 5px;
@@ -69,7 +92,7 @@ page-task-list {
         display: flex;
         align-items: center;
         
-        ion-input{
+        .my-ion-input{
           height: 35px;
           font-size: 1.2rem;
         }
@@ -89,11 +112,7 @@ page-task-list {
         }
       }
 
-      .div-block-bottom-border{
-        margin: 3px 0px;
-        border:1px solid #A6BBC8;
-        border-radius: 4px;
-      }
+      
       .div-title{
         font-size: 1.2rem;
         line-height: 25px;
@@ -101,15 +120,13 @@ page-task-list {
       }
 
       .div-checkbox-container {
+        display: flex; 
+        align-items: center;
+        flex-wrap: wrap;
         padding:3px;
         width: 100%;
         border-bottom: 0.5px solid #A6BBC8;
-        .btn_more {
-          position: absolute;
-          top: 42px;
-          right: 0px;
-          background-color: #A6BBC8;
-        }
+        
 
         .div-check-item-default {
           font-size: 1.0rem;
@@ -147,7 +164,78 @@ page-task-list {
             padding: 0px 2px;
           }
         }
+        .btn-action-img{
+          width:39px !important; 
+          height: 39px !important;
+        }
       }
+
+      .div-comments{
+        display: flex;
+        align-items: center; 
+        padding: 1px 5px;
+        
+        .div-comments-row{
+          flex: 1; 
+          display: flex;
+          align-items: center;
+        }
+        .div-comments-btn{
+          flex: 0;
+        }
+      }
+      
     }
   }
+
+  .div-block-bottom-border{
+    margin: 5px 0px;
+    border:1px solid #A6BBC8;
+    border-radius: 4px;
+    // box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .div-audio-record{
+    margin: 5px 0px;
+    border:1px solid #A6BBC8;
+    border-radius: 4px;
+    display: flex;
+    padding:1px 5px;
+    align-items: center;
+    font-size: 1.2rem !important;
+    .div-record-action{
+      display: flex;
+      align-items: center;
+      flex: 0;
+    }
+    .btn-action-bar-item{
+      margin: 8px 3px;
+    }
+    .div-record-process{
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+    }
+    .div-circle-dot{
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color:rgba(191,2,2,.8);
+      float: left;
+      animation: redanimations 1.5s ease infinite;
+    }
+    .div-record-time{
+      font-size: 1.4rem;
+      color: #666666;
+      margin: 0px 8px;
+    }
+
+    @keyframes redanimations{
+      0%{box-shadow:0 0 10px 2px rgba(191,2,2,.8);}
+      50%{box-shadow:0 0 10px 2px rgba(191,2,2,.3);}
+      100%{box-shadow:0 0 10px 2px rgba(191,2,2,.8);}
+    }
+  }
+
 }

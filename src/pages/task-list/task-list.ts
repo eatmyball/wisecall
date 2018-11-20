@@ -62,10 +62,22 @@ export class TaskListPage {
   drugOption: string = '';
 
   //物品运送
-  commodityArray = ['监护仪', '压力表', '轮椅', '微波炉', '其他'];
-  //更多检查项目
-  btn_commodity_text = '更多';
+  commodityArray = [{ name: '氧气', isChecked: false },{ name: 'PDA', isChecked: false },
+  { name: '温仪', isChecked: false },{ name: '监护仪', isChecked: false },
+  { name: '压力表', isChecked: false },{ name: '轮椅', isChecked: false },
+  { name: '微波炉', isChecked: false },{ name: '其他', isChecked: false }];
 
+  //录音相关
+  MAX_RECORD_TIME = 60;
+  text_record:string = '录音';
+  text_stop:string = '停止';
+
+  icon_record:string = 'ios-mic';
+  icon_stop:string = 'ios-pause';
+
+  btn_text_record = this.text_record;
+  icon_text_record = this.icon_record;
+  text_record_time = '';
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -174,6 +186,41 @@ export class TaskListPage {
 
   showPicture(item) {
     this.photo.show(item.path);
+  }
+
+
+  is_Record_start = false;
+  recordActionClicked() {
+    this.is_Record_start = !this.is_Record_start;
+
+    if(this.is_Record_start) {
+      this.btn_text_record = this.text_stop;
+      this.icon_text_record = this.icon_stop;
+      this.text_record_time = '00:00';
+      this.secondNum = 0;
+      this.startRecord();
+    }else {
+      clearInterval(this.handlerId);
+      this.btn_text_record = this.text_record;
+      this.icon_text_record = this.icon_record;
+    }
+  }
+
+  handlerId = 0;
+  secondNum = 0;
+  startRecord(){
+    this.handlerId =  setInterval(()=>{
+      if(this.secondNum < this.MAX_RECORD_TIME) {
+        this.secondNum ++;
+        if(this.secondNum < 10) {
+          this.text_record_time = '00:0'+this.secondNum;
+        }else {
+          this.text_record_time = '00:'+this.secondNum;
+        }
+      }else{
+        this.recordActionClicked();
+      }
+    }, 1000);
   }
 
 }

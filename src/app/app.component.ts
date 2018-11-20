@@ -17,16 +17,17 @@ export class MyApp {
   menuListData = [];
 
   constructor(platform: Platform, 
-    statusBar: StatusBar, 
-    splashScreen: SplashScreen, 
+    private statusBar: StatusBar, 
+    private splashScreen: SplashScreen, 
     private util:UtilityProvider,
     private menuCtrl:MenuController
     ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
-      splashScreen.hide();
+      this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#0070E0');
+      this.splashScreen.hide();
       this.menuCtrl.enable(false);
     });
 

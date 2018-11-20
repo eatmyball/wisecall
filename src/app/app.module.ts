@@ -10,6 +10,7 @@ import { UtilityProvider } from '../providers/utility/utility';
 import { ApiProvider } from '../providers/api/api';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { BackkeyProvider } from '../providers/backkey/backkey';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
     UtilityProvider,
     ApiProvider,
     PhotoViewer,
-    Camera
+    Camera,
+    BackkeyProvider
   ]
 })
 export class AppModule {}
