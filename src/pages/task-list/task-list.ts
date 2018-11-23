@@ -12,7 +12,7 @@ import * as Base64 from 'base64-js';
  */
 
 const MAX_IMG_SIZE: number = 2.0 * 1024 * 1024; //图片大小最大2.0M
-const AUTOREFRESH_TIME_INTERVAL = 20 * 1000; //自动刷新时间
+const AUTOREFRESH_TIME_INTERVAL = 30 * 1000; //自动刷新时间
 const SCROLL_EVENT_INTERVAL = 3 * 1000;//滚动时间判断间隔
 const CLOCK_TIME_INTERVAL = 1 * 1000; //每秒时钟
 
@@ -98,27 +98,28 @@ export class TaskListPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TaskListPage');
-    this.initTimer();
+    
     this.initBaseDatas();
     //获取列表数据
     this.firstGetList();
   }
 
   ionViewDidLeave() {
-    clearInterval(this.autoRefreshhandlerId);
-    clearInterval(this.clockHandlerId);
+    
   }
 
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
     // this.menuCtrl.open();
-
+    this.initTimer();
 
   }
 
   ionViewWillLeave() {
     this.menuCtrl.close();
     this.menuCtrl.enable(false);
+    clearInterval(this.autoRefreshhandlerId);
+    clearInterval(this.clockHandlerId);
   }
 
   autoRefreshhandlerId;
@@ -217,10 +218,10 @@ export class TaskListPage {
           item.Patientname = array[index]['Patientname'];
           item.Patientsex = array[index]['Patientsex'];
           item.PatientOld = array[index]['PatientOld'];
-          item.PatientBirthday = array[index]['PatientBirthday'];
+          item.PatientBirthday = array[index]['PatientBirthday'] ? this.util.formatAPIDate(new Date(array[index]['PatientBirthday']).getTime()):'';
           item.Operator = array[index]['Operator'];
           item.ExecuteBy = array[index]['ExecuteBy'];
-          item.ExecuteStart = array[index]['ExecuteStart'];
+          item.ExecuteStart = array[index]['ExecuteStart'] ? this.util.formatAPIDate(new Date(array[index]['ExecuteStart']).getTime()): '';
           item.ExecuteEnd = array[index]['ExecuteEnd'];
           item.RelatedBillNo = array[index]['RelatedBillNo'];
           item.DelayReason = array[index]['DelayReason'];
@@ -231,10 +232,16 @@ export class TaskListPage {
           item.DelegateBy = array[index]['DelegateBy'];
           item.DelegateAt = array[index]['DelegateAt'];
           item.String6 = array[index]['String6'];
-          item.CREATEDATE = this.util.formatAPIDate(new Date(array[index]['CREATEDATE']).getTime());
-          item.MODIFYDATE = array[index]['MODIFYDATE'];
+          item.CREATEDATE = array[index]['CREATEDATE']? this.util.formatAPIDate(new Date(array[index]['CREATEDATE']).getTime()):'';
+          item.MODIFYDATE = array[index]['MODIFYDATE']? this.util.formatAPIDate(new Date(array[index]['MODIFYDATE']).getTime()):'';
+          item.AssignAt = array[index]['AssignAt'] ? this.util.formatAPIDate(new Date(array[index]['AssignAt']).getTime()):'';
           item.imgs = array[index]['String9'];
+          item.String1 = array[index]['String1'];
+          item.String3 = array[index]['String3'];
+          item.EmergencyLevel = array[index]['EmergencyLevel'];
           item.BillNo = array[index]['BillNo'];
+          
+          item.Note = array[index]['Note'];
           item.State = array[index]['State'];
           if (item.State === '完工') {
             doneArray.push(item);
@@ -418,17 +425,7 @@ export class TaskListPage {
   }
 
   listItemClicked(item:TaskListItemModel) {
-    if(item.imgs) {
-      let images = [];
-      let array = item.imgs.split(',');
-      for(let index in array) {
-        let item = array[index];
-        images.push(this.api.BASE_URL + item);
-      }
-      this.navCtrl.push('GallaryPage', {imgs:images});
-    }else {
-      this.showAlert('没有病人检查单照片');
-    }
+    this.navCtrl.push('TaskInfoPage',{data:item});
   }
 
   pushTransferBill(event,item:TaskListItemModel) {
@@ -529,7 +526,11 @@ export class TaskListItemModel {
   String6: string = '';
   CREATEDATE: string = '';
   MODIFYDATE: string = '';
-
+  String1:string = '';
+  String3:string = '';
+  EmergencyLevel:string = '';
+  AssignAt:string = '';
+  Note:string = '';
   constructor() {
 
   }

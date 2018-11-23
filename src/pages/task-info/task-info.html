@@ -1,0 +1,183 @@
+<!--
+  Generated template for the TaskInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>任务详情</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="div-block">
+    <div class="div-row-bottom-border" style="justify-content: space-between;">
+      <div class="div-item-first">
+        <div class="div-item-title">
+          运送单号:
+        </div>
+        <div class="div-item-value">
+          {{data.BillNo}}
+        </div>
+      </div>
+      <div class="div-item-first">
+        <div class="div-item-title">
+          运送类型:
+        </div>
+        <div class="div-item-value">
+            {{data.TargetType}}
+        </div>
+      </div>
+      <div class="div-item-first">
+        <div class="div-item-title">
+          状态:
+        </div>
+        <div class="div-item-value">
+            {{data.State}}
+        </div>
+      </div>
+    </div>
+    <div class="div-row-no-border">
+      <div class="div-item">
+        <div class="div-item-title">
+          床号:
+        </div>
+        <div class="div-item-value">
+            {{data.FromSickbed}}
+        </div>
+      </div>
+      <div class="div-item">
+        <div class="div-item-title">
+          姓名:
+        </div>
+        <div class="div-item-value">
+            {{data.Patientname}}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="div-row-no-border">
+      <div class="div-item">
+        <div class="div-item-title">
+          检查项目:
+        </div>
+        <div class="div-item-value">
+            {{data.ToLocation}}
+        </div>
+      </div>
+    </div>
+    <div class="div-row-no-border">
+      <div class="div-item">
+        <div class="div-item-title">
+          创建时间:
+        </div>
+        <div class="div-item-value">
+            {{data.CREATEDATE}}
+        </div>
+      </div>
+      <div class="div-item">
+        <div class="div-item-title">
+          派单时间:
+        </div>
+        <div class="div-item-value">
+          {{data.AssignAt}}
+        </div>
+      </div>
+    </div>
+    <div class="div-row-no-border">
+      <div class="div-item">
+        <div class="div-item-title">
+          开始时间:
+        </div>
+        <div class="div-item-value">
+          {{data.ExecuteStart}}
+        </div>
+      </div>
+      <div class="div-item">
+        <div class="div-item-title">
+          预约时间:
+        </div>
+        <div class="div-item-value">
+          {{data.PatientBirthday}}
+        </div>
+      </div>
+    </div>
+    <div class="div-row-no-border">
+      <div class="div-item">
+        <div class="div-item-title">
+          运送工具:
+        </div>
+        <div class="div-item-value">
+            {{data.String1}}
+        </div>
+      </div>
+      <div class="div-item">
+        <div class="div-item-title">
+          备注:
+        </div>
+        <div class="div-item-value">
+            {{data.Note}}
+        </div>
+      </div>
+    </div>
+    <div class="div-row-no-border">
+      <div class="div-item">
+        <div class="div-item-title">
+          紧急程度:
+        </div>
+        <div class="div-item-value">
+          {{data.EmergencyLevel}}
+        </div>
+      </div>
+      <div class="div-item">
+        <div class="div-item-title">
+          运送人:
+        </div>
+        <div class="div-item-value">
+          {{data.Operator}}
+        </div>
+      </div>
+    </div>
+    <div class="div-row-bottom-border">
+      <div class="div-item" (click)="onImageClick()">
+        <div class="div-item-title">
+          检查单照片:
+        </div>
+        <div class="div-item-img">
+          查看详情
+        </div>
+      </div>
+      <div class="div-item" (click)="playAudio()">
+        <div class="div-item-title">
+          语音:
+        </div>
+        <div class="div-item-img">
+          播放语音
+        </div>
+      </div>
+    </div>
+    <div class="div-row-no-border">
+      <div class="div-item">
+          <button ion-button block color="danger">
+              <ion-icon name="ios-notifications">
+              </ion-icon>
+              催单
+            </button>
+      </div>
+      <div class="div-item">
+          <button ion-button block color="primary">
+              <ion-icon name="ios-undo">
+              </ion-icon>
+              取消
+            </button>
+      </div>
+      
+    </div>
+  </div>
+
+</ion-content>
