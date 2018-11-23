@@ -2,12 +2,12 @@
         <ion-content>
           <div class="menu-header">
             <!--material-design-background-->
-            <img class="img-avatar" src="../assets/imgs/avatar_m.png"/>
-            <p class="姓名">UserName</p>
-            <p class="工号">WorkNum</p>
+            <img class="img-avatar" src="./assets/imgs/avatar_m.png"/>
+            <p class="name">{{deptName}}</p>
+            <p class="e-mail">{{userName}}</p>
           </div>
           <ion-list no-lines>
-            <button menuClose="left" ion-item detail-none *ngFor="let item of menuListData" (click)="openPage(item.page)">
+            <button menuClose="left" ion-item detail-none *ngFor="let item of menuListData" (click)="openPage(item)">
             <ion-icon [name]="item.icon" item-left></ion-icon>
             {{item.name}}
           </button>

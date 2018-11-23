@@ -86,6 +86,12 @@ page-task-list {
         font-size: 1.2rem !important;
         border-bottom: 0.5px solid #A6BBC8;
       }
+      .div-item-row-no-border{
+        display: flex;
+        padding:1px 5px;
+        align-items: center;
+        font-size: 1.2rem !important;
+      }
       .div-item-row-half{   
         width: 50%;
         height: 35px;

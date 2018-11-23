@@ -1,4 +1,4 @@
-import { Http, RequestOptions } from "@angular/http";
+import { Headers,Http, RequestOptions } from "@angular/http";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/toPromise";
 import "rxjs/add/operator/timeout";
@@ -18,15 +18,23 @@ export class ApiProvider {
   }
 
   public Post(url: string, data: any) {
+    let header = new Headers({
+      "Content-Type": "text/xml; charset=utf-8",
+    });
+
     let urlAddress = url;
     return this.httpRequest({
       type: "post", data: {
         url: urlAddress,
-        data: data
+        data: data,
+        header: new RequestOptions({headers: header})
       }
     })
   }
   public Get(url: string, data) {
+    let header = new Headers({
+      "Content-Type": "text/xml; charset=utf-8",
+    });
 
     return this.httpRequest(
       {
@@ -34,29 +42,36 @@ export class ApiProvider {
         data: {
           url: url,
           data: data,
-          header: new RequestOptions({ withCredentials: true })
+          header: new RequestOptions({headers: header})
         }
       });
   }
   public DELETE(url: string, data) {
+    let header = new Headers({
+      "Content-Type": "text/xml; charset=utf-8",
+    });
     return this.httpRequest(
       {
         type: "delete",
         data: {
           url: url,
           data: data,
-          header: new RequestOptions({ withCredentials: true })
+          header: new RequestOptions({headers: header})
         }
       });
   }
   public PUT(url, data) {
+    let header = new Headers({
+      "Content-Type": "text/xml; charset=utf-8",
+    });
+
     return this.httpRequest(
       {
         type: "put",
         data: {
           url: url,
           data: data,
-          header: new RequestOptions({ withCredentials: true })
+          header: new RequestOptions({headers: header})
         }
       });
   }
@@ -96,7 +111,7 @@ export class ApiProvider {
     if (result.status !== 200) {
       return { success: false };
     }
-    result = result.json();
+    // result = result.json();
     return result;
   }
 
@@ -105,6 +120,7 @@ export class ApiProvider {
    * @param error 
    */
   handleError(error) {
+    console.log('Http error:' + JSON.stringify(error,Object.getOwnPropertyNames(error)));
     return error.json();
   }
 

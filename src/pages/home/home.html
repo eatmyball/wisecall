@@ -7,14 +7,14 @@
   <ion-row>
     <ion-col>
       <ion-list>
-        <ion-item>
-          <ion-label>用户名</ion-label>
-          <ion-input type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>密码</ion-label>
-          <ion-input type="password"></ion-input>
-        </ion-item>
+            <ion-item >
+                <ion-label>用户名</ion-label>
+                <ion-input type="text" placeHolder="请输入用户名" [(ngModel)]="username" required></ion-input>
+              </ion-item>
+              <ion-item >
+                <ion-label>密码</ion-label>
+                <ion-input type="password" placeHolder="请输入密码"[(ngModel)]="password" required></ion-input>
+              </ion-item>
       </ion-list>
     </ion-col>
 

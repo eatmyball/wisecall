@@ -4,13 +4,16 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
+import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { UtilityProvider } from '../providers/utility/utility';
 import { ApiProvider } from '../providers/api/api';
-import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { BackkeyProvider } from '../providers/backkey/backkey';
+import { HttpModule } from '@angular/http';
+import { SoapApiProvider } from '../providers/soap-api/soap-api';
+import { LocalDbProvider } from '../providers/local-db/local-db';
 
 
 @NgModule({
@@ -25,9 +28,15 @@ import { BackkeyProvider } from '../providers/backkey/backkey';
       tabs: '',   
       iconMode: 'ios',
       mode: 'ios', //样式选择ios模式，以便统一客户端样式
+      backButtonText: '',
       scrollPadding: false,
       scrollAssist: true,
       autoFocusAssit: false
+    }),
+    HttpModule,
+    IonicStorageModule.forRoot({
+      name: 'my_storage',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
   ],
   bootstrap: [IonicApp],
@@ -41,9 +50,10 @@ import { BackkeyProvider } from '../providers/backkey/backkey';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UtilityProvider,
     ApiProvider,
-    PhotoViewer,
     Camera,
-    BackkeyProvider
+    BackkeyProvider,
+    SoapApiProvider,
+    LocalDbProvider
   ]
 })
 export class AppModule {}

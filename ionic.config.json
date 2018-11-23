@@ -3,5 +3,11 @@
   "integrations": {
     "cordova": {}
   },
-  "type": "ionic-angular"
+  "type": "ionic-angular",
+  "proxies":[
+    {
+      "path": "/htmwstest",
+      "proxyUrl": "http://123.206.111.21/htmwstest"
+    }
+  ]
 }

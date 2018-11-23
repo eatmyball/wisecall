@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ToastController, LoadingController, Loading } from 'ionic-angular';
+import { ToastController, LoadingController, Loading, AlertController } from 'ionic-angular';
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
@@ -19,6 +18,7 @@ export class UtilityProvider {
 
   constructor(private toastCtrl: ToastController, 
     private loadingCtrl: LoadingController,
+    private alert:AlertController,
     private camera:Camera
     ) {
     console.log('Hello UtilityProvider Provider');
@@ -66,6 +66,36 @@ export class UtilityProvider {
     toast.present();
   }
 
+  showAlert(title:string, msg:string, cancelTxt:string) {
+    let alertWindow = this.alert.create({
+      title:title,
+      message:msg,
+      buttons:[
+        {
+          text:cancelTxt,
+          role:'cancel'
+        }
+      ]
+    });
+    alertWindow.present();
+  }
+
+  /**
+   * 接口时间字段，标准时间格式：2018-09-28 19:09:29
+   * @param time 
+   */
+  formatAPIDate(time: number): string {
+    const Dates = new Date(time);
+    const year: number = Dates.getFullYear();
+    const month: any = (Dates.getMonth() + 1) < 10 ? '0' + (Dates.getMonth() + 1) : (Dates.getMonth() + 1);
+    const day: any = Dates.getDate() < 10 ? '0' + Dates.getDate() : Dates.getDate();
+    const HH: any = Dates.getHours() < 10 ? '0' + Dates.getHours() : Dates.getHours();
+    const mm: any = Dates.getMinutes() < 10 ? '0' + Dates.getMinutes() : Dates.getMinutes();
+    const ss: any = Dates.getSeconds() < 10 ? '0' + Dates.getSeconds() : Dates.getSeconds();
+    const result = year + '-' + month + '-' + day + " " + HH + ":" + mm + ':' + ss;
+    return result;
+  }
+
   /**
      * 转换时间格式为YYYY-MM-DD HH:mm
      */
@@ -94,24 +124,6 @@ export class UtilityProvider {
         if (medias.length == 0) {
           reject('请选择一张图片上传');
         }
-        //[{mediaType: "image", path:'/storage/emulated/0/DCIM/Camera/2017.jpg', uri:"android retrun uri,ios retrun URL" size: 21993}]
-        // let data = [];
-        // for(let index in medias){
-        //   let item = medias[index];
-        //   if(item.size > MAX_IMG_SIZE) {
-        //     item.quality = 90;
-        //     this.compressImage(item).then(data=>{
-        //       console.log('compress img:'+JSON.stringify(data));
-        //     });
-
-           
-            
-        //     // data.push();
-        //   }else {
-        //     item.quality = 100;
-        //     data.push(item);
-        //   }
-        // }
         resolve(medias);
       }))
     });
@@ -145,18 +157,15 @@ export class UtilityProvider {
 
     return new Promise((resovle, reject)=>{
       const CAMERA_OPTIONS: CameraOptions = {
-        quality: 100,
-        destinationType: this.camera.DestinationType.FILE_URI,
+        quality: 85,
+        destinationType: this.camera.DestinationType.DATA_URL,
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE
       }
   
       this.camera.getPicture(CAMERA_OPTIONS).then((imageData) => {
         if(imageData) {
-          let result = (<string>imageData);
-          result = result.slice(7, result.length);
-          console.log('take Photo:'+result);
-          resovle(result);
+          resovle(imageData);
         }
        }, (err) => {
           reject(err);
@@ -173,4 +182,9 @@ export const enum TOAST_POSITION {
   MIDDLE = 'middle',
   TOP = 'top',
   BOTTOM = 'bottom'
+}
+
+export interface AlertOkOption {
+    okText?: string;
+    handler?: (value: any) => boolean | void;
 }
