@@ -92,7 +92,8 @@ export class TaskInfoPage {
     );
   }
 
-  backClicked() {
+  backClicked(event) {
+    event.stopPropagation();
     this.navCtrl.pop();
   }
 

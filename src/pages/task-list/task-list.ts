@@ -90,7 +90,8 @@ export class TaskListPage {
     private api: SoapApiProvider
   ) {
     //系统有BUG要往前8个小时
-    let now = new Date().getTime() + 8 * 60 * 60 * 1000;
+    // let now = new Date().getTime() + 8 * 60 * 60 * 1000;
+    let now = new Date().getTime();
     this.checkDate = new Date(now).toISOString();
     console.log('default Time:' + this.checkDate);
   }
@@ -272,7 +273,7 @@ export class TaskListPage {
       this.util.showLoading('创建任务中,请稍候...');
       setTimeout(() => {
         let data = this.getTransferDataForm(TRANSPORT_PATIENT);
-        this.api.createPatientTransferTask(data).then(result => {
+        this.api.createTransferTask(data).then(result => {
           this.util.dismissLoading();
           if (result['Flag'] === 'S') {
             this.showAlert('创建成功');
@@ -294,7 +295,22 @@ export class TaskListPage {
 
   //标本运送
   onSpecimenTransport() {
-
+    //标本运送
+    this.util.showAlertWithOkhandler('提示', '是否创建标本运送任务','否','是',(data)=>{
+      let params = this.getTransferDataForm(TRANSPORT_SPECIMEN);
+      this.api.createTransferTask(params).then(result=>{
+        if (result['Flag'] === 'S') {
+          this.showAlert('创建成功');
+          this.getTrackListData(); //刷新列表
+        } else {
+          this.showAlert('创建失败,' + result['Message']);
+        }
+      }).catch(error=>{
+        this.util.dismissLoading();
+          this.showAlert('创建失败,请稍后重试！');
+      })
+    })
+    
   }
 
   //运送任务表单结构
@@ -308,8 +324,11 @@ export class TaskListPage {
     data['StandardLength'] = 15;
     data['EmergencyLevelName'] = '二级';
     data['EmergencyLevelNo'] = 'EL002';
+    data['patientname'] = '';
+    data['CreatedByCode'] = this.api.userInfo['Account'];
     let checkDateStr = this.util.formatAPIDate(new Date(this.checkDate).getTime());
     data['CreateDatetime'] = checkDateStr;
+    data['BillType'] = '即时';
     switch (transferType) {
       //病人运送
       case TRANSPORT_PATIENT:
@@ -317,9 +336,6 @@ export class TaskListPage {
         data['TransferTools'] = this.transportOption;
         data['FromSickbed'] = this.bedNum;
         data['patientname'] = this.patientName;
-        data['BillType'] = '即时';
-        data['CreatedByCode'] = this.api.userInfo['Account'];
-        
         data['CheckTime'] = checkDateStr;
         let picStr = '';
         for(let index in this.picArray) {

@@ -79,8 +79,12 @@ export class SoapApiProvider {
    * 创建病人运送单
    * @param formdata 
    */
-  public createPatientTransferTask(formdata:Object) {
+  public createTransferTask(formdata:Object) {
     return this.doSoapByActionName('NewTransferTaskForiPad',JSON.stringify(formdata));
+  }
+
+  public CancelTransferTask(){
+
   }
 
   /**

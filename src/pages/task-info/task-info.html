@@ -164,21 +164,21 @@
     </div>
     <div class="div-row-no-border">
       <div class="div-item">
-          <button ion-button block color="danger" (click)="pushTransferBill()">
+          <button ion-button block color="danger" (click)="pushTransferBill($event)">
               <ion-icon name="ios-notifications">
               </ion-icon>
               催单
             </button>
       </div>
       <div class="div-item">
-          <button ion-button block color="primary" (click)="cancelTransferBill()">
+          <button ion-button block color="primary" (click)="cancelTransferBill($event)">
               <ion-icon name="ios-undo">
               </ion-icon>
               取消
             </button>
       </div>
       <div class="div-item">
-          <button ion-button block color="secondary" (click)="backClicked()">
+          <button ion-button block color="secondary" (click)="backClicked($event)">
               <ion-icon name="ios-arrow-back">
               </ion-icon>
               返回
