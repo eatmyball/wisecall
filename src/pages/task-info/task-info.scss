@@ -23,14 +23,18 @@ page-task-info {
         .div-item-title{
             font-size: 1.4rem;
             color: #333333;
+            min-width: 32px;
+            line-height: 15px;
         }
         .div-item-value{
             font-size: 1.4rem;
             color: #666666;
+            line-height: 15px;
         }
         .div-item-img{
             font-size: 1.4rem;
             color: #0070E0;
+            line-height: 15px;
         }
     }
     .div-item{
@@ -41,14 +45,18 @@ page-task-info {
         .div-item-title{
             font-size: 1.4rem;
             color: #333333;
+            min-width: 32px;
+            line-height: 15px;
         }
         .div-item-value{
             font-size: 1.4rem;
             color: #666666;
+            line-height: 15px;
         }
-        .div-item-img{
-            font-size: 1.4rem;
-            color: #0070E0;
-        }
+    }
+    .div-imgs{
+        display:flex;
+        align-items: center;
+        flex-wrap: wrap;
     }
 }

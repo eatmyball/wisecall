@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.wisebox.nursestation" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>WiseCall</name>
-    <description>护士站App</description>
+    <name>朗泰CSC</name>
+    <description>朗泰护士站</description>
     <author email="denghliu@126.com" href="http://ionicframework.com/">Hank-Teng</author>
     <content src="index.html" />
     <access origin="*" />

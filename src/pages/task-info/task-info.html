@@ -55,19 +55,19 @@
           姓名:
         </div>
         <div class="div-item-value">
-            {{data.Patientname}}
+            {{data.patientname}}
         </div>
       </div>
 
     </div>
 
     <div class="div-row-no-border">
-      <div class="div-item">
+      <div class="div-item" style="align-items: flex-start">
         <div class="div-item-title">
           检查项目:
         </div>
         <div class="div-item-value">
-            {{data.ToLocation}}
+            {{data.String10}}
         </div>
       </div>
     </div>
@@ -82,10 +82,10 @@
       </div>
       <div class="div-item">
         <div class="div-item-title">
-          派单时间:
+          预约时间:
         </div>
         <div class="div-item-value">
-          {{data.AssignAt}}
+          {{data.PatientBirthday}}
         </div>
       </div>
     </div>
@@ -100,10 +100,10 @@
       </div>
       <div class="div-item">
         <div class="div-item-title">
-          预约时间:
+          派单时间:
         </div>
         <div class="div-item-value">
-          {{data.PatientBirthday}}
+          {{data.AssignAt}}
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@
             {{data.String1}}
         </div>
       </div>
-      <div class="div-item">
+      <div class="div-item" style="align-items: flex-start">
         <div class="div-item-title">
           备注:
         </div>
@@ -144,39 +144,46 @@
       </div>
     </div>
     <div class="div-row-bottom-border">
-      <div class="div-item" (click)="onImageClick()">
+      <div class="div-item" style="align-items: flex-start">
         <div class="div-item-title">
           检查单照片:
         </div>
-        <div class="div-item-img">
-          查看详情
+        <div class="div-imgs">
+            <img *ngFor="let item of picArray; let i = index" class="div-img-item" src="{{item.thumbImgPath}}" (click)="showPicture(item)"/>
         </div>
       </div>
       <div class="div-item" (click)="playAudio()">
         <div class="div-item-title">
           语音:
         </div>
-        <div class="div-item-img">
-          播放语音
+        <div class="div-item-value">
+          暂无
         </div>
+        <button *ngIf="false"  ion-button small><ion-icon name="ios-play"></ion-icon>&nbsp;播放</button>
       </div>
     </div>
     <div class="div-row-no-border">
       <div class="div-item">
-          <button ion-button block color="danger">
+          <button ion-button block color="danger" (click)="pushTransferBill()">
               <ion-icon name="ios-notifications">
               </ion-icon>
               催单
             </button>
       </div>
       <div class="div-item">
-          <button ion-button block color="primary">
+          <button ion-button block color="primary" (click)="cancelTransferBill()">
               <ion-icon name="ios-undo">
               </ion-icon>
               取消
             </button>
       </div>
-      
+      <div class="div-item">
+          <button ion-button block color="secondary" (click)="backClicked()">
+              <ion-icon name="ios-arrow-back">
+              </ion-icon>
+              返回
+            </button>
+      </div>
     </div>
   </div>
 

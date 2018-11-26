@@ -14,6 +14,9 @@ export class SoapApiProvider {
 
   BASE_URL = 'http://123.206.111.21/htmwstest/';
 
+  //缩略图路径
+  THUMB_URL = this.BASE_URL+'uploadimage/';
+
   BASE_API_URL = this.BASE_URL+'wsformicromsg.asmx?wsdl';
 
   userInfo:Object = null;
@@ -77,14 +80,14 @@ export class SoapApiProvider {
    * @param formdata 
    */
   public createPatientTransferTask(formdata:Object) {
-    return this.doSoapByActionName('NewTransferTask',JSON.stringify(formdata));
+    return this.doSoapByActionName('NewTransferTaskForiPad',JSON.stringify(formdata));
   }
 
   /**
    * 查询医院的科室与检查项目
    */
   public GetCheckItemByHospitalDeptCode():Promise<Object> {
-    return this.doSoapByActionName('GetCheckItemByHospitalDeptCode','{"HospitalCode": "03023","DeptCode":"03023020502"}');
+    return this.doSoapByActionName('GetCheckItemByHospitalDeptCode','{"HospitalCode": "03023","DeptCode":""}');
   }
 
   /**

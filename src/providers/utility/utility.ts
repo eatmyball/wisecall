@@ -80,6 +80,24 @@ export class UtilityProvider {
     alertWindow.present();
   }
 
+  showAlertWithOkhandler(title:string, msg:string, cancelTxt:string, okText:string, okhandler:(value: any) => boolean | void) {
+    let alertWindow = this.alert.create({
+      title:title,
+      message:msg,
+      buttons:[
+        {
+          text:cancelTxt,
+          role:'cancel'
+        },
+        {
+          text:okText,
+          handler:okhandler
+        }
+      ]
+    });
+    alertWindow.present();
+  }
+
   /**
    * 接口时间字段，标准时间格式：2018-09-28 19:09:29
    * @param time 

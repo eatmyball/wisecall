@@ -46,7 +46,7 @@ export class TaskListPage {
   //运送工具
   transportTools = [];
   transportOption: string = '轮椅';
-  //检查时间
+  //预约时间
   checkDate: string = '';
   //选择的照片
   picArray = [];
@@ -101,7 +101,7 @@ export class TaskListPage {
     
     this.initBaseDatas();
     //获取列表数据
-    this.firstGetList();
+    this.getTrackListDataShowLoading();
   }
 
   ionViewDidLeave() {
@@ -192,7 +192,7 @@ export class TaskListPage {
   }
 
   //第一次打开，有刷新效果
-  firstGetList() {
+  getTrackListDataShowLoading() {
     this.util.showLoading('努力加载中...');
     setTimeout(() => {
       this.util.dismissLoading();
@@ -215,7 +215,7 @@ export class TaskListPage {
           item.FromSickbed = array[index]['FromSickbed'];
           item.ToLocation = array[index]['ToLocation'];
           item.PatientNo = array[index]['PatientNo'];
-          item.Patientname = array[index]['Patientname'];
+          item.patientname = array[index]['patientname'];
           item.Patientsex = array[index]['Patientsex'];
           item.PatientOld = array[index]['PatientOld'];
           item.PatientBirthday = array[index]['PatientBirthday'] ? this.util.formatAPIDate(new Date(array[index]['PatientBirthday']).getTime()):'';
@@ -240,7 +240,7 @@ export class TaskListPage {
           item.String3 = array[index]['String3'];
           item.EmergencyLevel = array[index]['EmergencyLevel'];
           item.BillNo = array[index]['BillNo'];
-          
+          item.String10 = array[index]['String10'];
           item.Note = array[index]['Note'];
           item.State = array[index]['State'];
           if (item.State === '完工') {
@@ -277,6 +277,7 @@ export class TaskListPage {
           if (result['Flag'] === 'S') {
             this.showAlert('创建成功');
             this.resetFormData();
+            this.getTrackListData(); //刷新列表
           } else {
             this.showAlert('创建失败,' + result['Message']);
           }
@@ -307,17 +308,19 @@ export class TaskListPage {
     data['StandardLength'] = 15;
     data['EmergencyLevelName'] = '二级';
     data['EmergencyLevelNo'] = 'EL002';
+    let checkDateStr = this.util.formatAPIDate(new Date(this.checkDate).getTime());
+    data['CreateDatetime'] = checkDateStr;
     switch (transferType) {
       //病人运送
       case TRANSPORT_PATIENT:
         data['TargetType'] = "病人";
         data['TransferTools'] = this.transportOption;
         data['FromSickbed'] = this.bedNum;
-        data['PatientName'] = this.patientName;
+        data['patientname'] = this.patientName;
         data['BillType'] = '即时';
         data['CreatedByCode'] = this.api.userInfo['Account'];
-        data['CreateDatetime'] = this.checkDate;
-        data['CheckTime'] = this.checkDate;
+        
+        data['CheckTime'] = checkDateStr;
         let picStr = '';
         for(let index in this.picArray) {
           let item = this.picArray[index];
@@ -327,20 +330,21 @@ export class TaskListPage {
           data['String9']= picStr.substring(0, picStr.length -1);
         }
         let toLocation = '';
-        let note = this.comments + ',';
+        let checkOptions = '';
         console.log('checkOptions' + JSON.stringify(this.checkOptionArray));
         for (let index in this.checkOptionArray) {
           let item = this.checkOptionArray[index];
           if (item['isChecked']) {
             toLocation += item['PROPNAME'] + ',';
-            note += item['PROPSTRING6'] + ',' + this.checkDate + ','
+            checkOptions += item['PROPSTRING6'] + ','
           }
 
         }
         toLocation = toLocation.substring(0, toLocation.length - 1);
-        note = note.substring(0, note.length - 1);
+        checkOptions = checkOptions.substring(0, checkOptions.length - 1);
         data['ToLocation'] = toLocation;
-        data['Note'] = note;
+        data['Note'] = this.comments;
+        data['String10'] = checkOptions;
         break;
       case TRANSPORT_SPECIMEN:
         data['TargetType'] = "标本";
@@ -383,7 +387,8 @@ export class TaskListPage {
         if (data['Flag'] === 'S') {
           let pic = new PictureForUpload();
           pic.name = name;
-          pic.index = this.picArray.length + 1;
+          pic.thumbImgPath = this.api.THUMB_URL + pic.name;
+          pic.url = this.api.BASE_URL + pic.name;
           this.picArray.push(pic);
         } else {
           this.showAlert('上传失败，请稍后重试！');
@@ -420,31 +425,50 @@ export class TaskListPage {
     this.picArray = [];
   }
 
-  showPicture(item) {
+  showPicture(item:PictureForUpload) {
     //base64显示图片
+    window.open(item.url);
   }
 
   listItemClicked(item:TaskListItemModel) {
     this.navCtrl.push('TaskInfoPage',{data:item});
   }
 
+  //催单
   pushTransferBill(event,item:TaskListItemModel) {
     event.stopPropagation();
+    this.util.showAlertWithOkhandler(
+      '提示','确认是否催单','取消','确认',(data)=>{
+        this.util.showLoading('正在提交,请稍候...');
+          setTimeout(() => {
+            this.api.PushTransferTaskByID(item.BillNo).then(data=>{
+              this.util.dismissLoading();
+              if(data['Flag'] === 'S') {
+                this.showAlert('催单成功');
+              }else {
+                this.showAlert('催单失败,'+data['Message']);
+              }
+            }).catch(error=>{
+              this.util.dismissLoading();
+              this.showAlert(JSON.stringify(error));
+            });
+          }, 500);
+      }
+    );
+  }
 
-    this.util.showLoading('正在提交,请稍候...');
-    setTimeout(() => {
-      this.api.PushTransferTaskByID(item.BillNo).then(data=>{
-        this.util.dismissLoading();
-        if(data['Flag'] === 'S') {
-          this.showAlert('催单成功');
-        }else {
-          this.showAlert('催单失败,'+data['Message']);
-        }
-      }).catch(error=>{
-        this.util.dismissLoading();
-        this.showAlert(JSON.stringify(error));
-      });
-    }, 500);
+  cancelTransferBill(event,item:TaskListItemModel) {
+    event.stopPropagation();
+    this.util.showAlertWithOkhandler(
+      '提示','确认是否取消任务','取消','确认',(data)=>{
+      }
+    );
+  }
+
+  refreshList() {
+    this.doingTaskList = [];
+    this.doneTaskList = [];
+    this.getTrackListDataShowLoading();
   }
 
 
@@ -490,8 +514,8 @@ export class TaskListPage {
 
 export class PictureForUpload {
   name: string = '';
-  index: number;
-
+  url: string;
+  thumbImgPath:string = ''; 
   constructor() {
 
   }
@@ -505,7 +529,7 @@ export class TaskListItemModel {
   FromSickbed: string = '';
   ToLocation: string = '';
   PatientNo: string = '';
-  Patientname: string = '';
+  patientname: string = '';
   Patientsex: string = '';
   PatientOld: string = '';
   PatientBirthday: string = '';
@@ -531,6 +555,7 @@ export class TaskListItemModel {
   EmergencyLevel:string = '';
   AssignAt:string = '';
   Note:string = '';
+  String10:string = '';//检查项目
   constructor() {
 
   }

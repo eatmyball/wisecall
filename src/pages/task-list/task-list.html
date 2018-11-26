@@ -67,11 +67,7 @@
             <div>
               <div class="div-upload-img-content">
                 <div class="div-title">拍摄病人检查单</div>
-                <div *ngFor="let item of picArray; let i = index" class="div-img-item" (click)="showPicture(item)">
-                  <div>
-                    照片{{item.index}}
-                  </div>
-                </div>
+                <img *ngFor="let item of picArray; let i = index" class="div-img-item" src="{{item.thumbImgPath}}" (click)="showPicture(item)"/>
 
                 <button *ngIf="picArray.length < 5" ion-button outline small class="btn-action-img" (click)="takePhoto()">
                   <ion-icon name="ios-camera-outline"></ion-icon>
@@ -98,11 +94,11 @@
               <div class="div-title">呼叫标本服务</div>
               <div class="div-action-blue" *ngIf="true">
                 <ion-icon name="ios-call" color="text-white"></ion-icon>
-                <div>呼叫</div>
+                <div class="div-action-btn-text">呼叫</div>
               </div>
               <div class="div-action-red" *ngIf="true">
                 <ion-icon name="ios-notifications" color="text-white"></ion-icon>
-                <div>催单</div>
+                <div class="div-action-btn-text">催单</div>
               </div>
             </div>
           </div>
@@ -167,7 +163,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="true"  class="div-audio-record">
+      <div *ngIf="false"  class="div-audio-record">
         <div class="div-record-action">
           <button ion-button small class="btn-action-bar-item" (click)="recordActionClicked()"><ion-icon name="{{icon_text_record}}"></ion-icon>&nbsp;{{btn_text_record}}</button>
           <button ion-button small class="btn-action-bar-item"><ion-icon name="ios-play"></ion-icon>&nbsp;播放</button>
@@ -199,26 +195,20 @@
             <div *ngSwitchCase="'DOING'" class="div-list-content">
                 <div class="ion-card-content" *ngFor="let item of doingTaskList" (click)="listItemClicked(item)">
                   <div>
-                    <div>
-                      {{item.FromLocation}} -> {{item.ToLocation}}
-                    </div>
-                    <div>
-                      {{item.TargetType}}
-                    </div>
-                    <div>
-                      {{item.CREATEDATE}}&nbsp;&nbsp;&nbsp;&nbsp;{{item.Status}}
-                    </div>
+                      <div class="div-text">
+                          <b>{{item.FromSickbed}}&nbsp;|&nbsp;{{item.patientname}}</b>&nbsp;|&nbsp;{{item.String10}}
+                        </div>
+                        <div class="div-text">
+                          {{item.CREATEDATE}}&nbsp;&nbsp;&nbsp;&nbsp;{{item.State}}
+                        </div>
                   </div>
                   <div class="div-action-bar">
-                    <div class="div-action-red" *ngIf="true" (click)="pushTransferBill($event, item)">
-                      <ion-icon name="ios-notifications" color="text-white"></ion-icon>
-                      <div>催单</div>
-                    </div>
-      
-                    <div class="div-action-blue" *ngIf="true">
-                      <ion-icon name="ios-undo" color="text-white"></ion-icon>
-                      <div>取消</div>
-                    </div>
+                    <button ion-button small class="btn-action-bar-item" color="danger" (click)="pushTransferBill($event, item)">
+                      <ion-icon name="ios-notifications"></ion-icon>&nbsp;催单
+                    </button>
+                    <button ion-button small class="btn-action-bar-item" color="primary" (click)="cancelTransferBill($event, item)">
+                      <ion-icon name="ios-undo"></ion-icon>&nbsp;取消
+                    </button>
                   </div>
                 </div>
               </div>
@@ -226,14 +216,11 @@
               <div *ngSwitchCase="'DONE'" class="div-list-content">
                   <div class="ion-card-content" *ngFor="let item of doneTaskList">
                     <div>
-                      <div>
-                        {{item.FromLocation}} -> {{item.ToLocation}}
+                      <div class="div-text">
+                        <b>{{item.FromSickbed}}&nbsp;|&nbsp;{{item.patientname}}</b>&nbsp;|&nbsp;{{item.String10}}
                       </div>
-                      <div>
-                        {{item.TargetType}}
-                      </div>
-                      <div>
-                        {{item.CREATEDATE}}&nbsp;&nbsp;&nbsp;&nbsp;{{item.Status}}
+                      <div class="div-text">
+                        {{item.CREATEDATE}}&nbsp;&nbsp;&nbsp;&nbsp;{{item.State}}
                       </div>
                     </div>
                   </div>
@@ -242,4 +229,9 @@
       </ion-scroll>
     </div>
   </div>
+
+  <ion-fab bottom right>
+      <button ion-fab mini (click)="refreshList()"><ion-icon name="ios-refresh" ></ion-icon></button>
+    </ion-fab>
+
 </ion-content>
