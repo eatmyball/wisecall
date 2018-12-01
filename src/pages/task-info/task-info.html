@@ -62,7 +62,7 @@
     </div>
 
     <div class="div-row-no-border">
-      <div class="div-item" style="align-items: flex-start">
+      <div class="div-item" style="width: 100%; align-items: flex-start">
         <div class="div-item-title">
           检查项目:
         </div>
@@ -92,18 +92,18 @@
     <div class="div-row-no-border">
       <div class="div-item">
         <div class="div-item-title">
-          开始时间:
-        </div>
-        <div class="div-item-value">
-          {{data.ExecuteStart}}
-        </div>
-      </div>
-      <div class="div-item">
-        <div class="div-item-title">
           派单时间:
         </div>
         <div class="div-item-value">
           {{data.AssignAt}}
+        </div>
+      </div>
+      <div class="div-item">
+        <div class="div-item-title">
+          开始时间:
+        </div>
+        <div class="div-item-value">
+          {{data.ExecuteStart}}
         </div>
       </div>
     </div>
@@ -143,7 +143,7 @@
         </div>
       </div>
     </div>
-    <div class="div-row-bottom-border">
+    <div class="div-row-bottom-border" *ngIf="false" >
       <div class="div-item" style="align-items: flex-start">
         <div class="div-item-title">
           检查单照片:
@@ -152,7 +152,7 @@
             <img *ngFor="let item of picArray; let i = index" class="div-img-item" src="{{item.thumbImgPath}}" (click)="showPicture(item)"/>
         </div>
       </div>
-      <div class="div-item" (click)="playAudio()">
+      <div class="div-item" *ngIf="false" (click)="playAudio()">
         <div class="div-item-title">
           语音:
         </div>

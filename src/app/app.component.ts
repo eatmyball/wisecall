@@ -49,6 +49,7 @@ export class MyApp {
       {name:'报修',icon:'ios-construct',page:''},
       {name:'建议',icon:'ios-chatboxes',page:''},
       {name:'帮助',icon:'ios-help-circle',page:''},
+      {name:'更新',icon:'ios-information-circle',page:''},
       {name:'登出',icon:'ios-log-out',page:''},
     ];
     
@@ -59,7 +60,13 @@ export class MyApp {
       this.local.save('account','');
       this.local.save('password','');
       this.nav.setRoot(HomePage);
-    }else {
+      return;
+    }
+    else if(page['name'] === '更新') {
+      window.open('about:blank');
+      return;
+    }
+    else {
       let pagename = page['page'];
       if(pagename) {
         this.nav.setRoot(pagename);

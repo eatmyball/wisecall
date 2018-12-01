@@ -52,8 +52,6 @@ export class TaskListPage {
   picArray = [];
   //备注
   comments: string = '';
-  //整个表单form
-  patientTransferBody = {};
 
   //送药运送表单内容
   //药房类型
@@ -89,30 +87,27 @@ export class TaskListPage {
     private util: UtilityProvider,
     private api: SoapApiProvider
   ) {
-    //系统有BUG要往前8个小时
-    // let now = new Date().getTime() + 8 * 60 * 60 * 1000;
-    let now = new Date().getTime();
-    this.checkDate = new Date(now).toISOString();
-    console.log('default Time:' + this.checkDate);
+    // this.initDefaultTime();
   }
 
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TaskListPage');
-    
+
     this.initBaseDatas();
     //获取列表数据
     this.getTrackListDataShowLoading();
   }
 
   ionViewDidLeave() {
-    
+
   }
 
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
     // this.menuCtrl.open();
     this.initTimer();
+    this.getTrackListData();
 
   }
 
@@ -121,6 +116,12 @@ export class TaskListPage {
     this.menuCtrl.enable(false);
     clearInterval(this.autoRefreshhandlerId);
     clearInterval(this.clockHandlerId);
+  }
+
+  initDefaultTime() {
+    //北京时区
+    this.checkDate = this.util.dateFormat(new Date(), 'yyyy-MM-ddTHH:mm:ss+08:00');
+    console.log('init default Time:' + this.checkDate);
   }
 
   autoRefreshhandlerId;
@@ -162,8 +163,25 @@ export class TaskListPage {
    * 选项类数据初始化
    */
   initBaseDatas() {
-    //检查项目
-    this.api.GetCheckItemByHospitalDeptCode().then(data => {
+    this.getTransferTools();
+    this.getCheckItemByHospitalDeptCode();
+    this.getDrugTypeByHospitalDept();
+  }
+
+  //运送工具
+  getTransferTools() {
+
+    this.api.GetTransferTools().then(data => {
+      if (data['Flag'] === 'S') {
+        this.transportTools = data['dsData']['Table'];
+      }
+    }).catch(error => {
+    });
+  }
+
+  //检查项目
+  getCheckItemByHospitalDeptCode() {
+    this.api.GetCheckItemByHospitalDeptCodeForIpad().then(data => {
       if (data['Flag'] === 'S') {
         let datas = data['dsData']['Table'];
         for (let index in datas) {
@@ -174,16 +192,9 @@ export class TaskListPage {
       }
     }).catch(error => {
     });
-
-    //运送工具
-    this.api.GetTransferTools().then(data => {
-      if (data['Flag'] === 'S') {
-        this.transportTools = data['dsData']['Table'];
-      }
-    }).catch(error => {
-    });
-
-    //药房类型
+  }
+  //药房类型
+  getDrugTypeByHospitalDept() {
     this.api.GetDrugTypeByHospitalDeptCode().then(data => {
       if (data['Flag'] === 'S') {
         this.drugTypies = data['dsData']['Table'];
@@ -191,6 +202,7 @@ export class TaskListPage {
     }).catch(error => {
     });
   }
+
 
   //第一次打开，有刷新效果
   getTrackListDataShowLoading() {
@@ -219,10 +231,10 @@ export class TaskListPage {
           item.patientname = array[index]['patientname'];
           item.Patientsex = array[index]['Patientsex'];
           item.PatientOld = array[index]['PatientOld'];
-          item.PatientBirthday = array[index]['PatientBirthday'] ? this.util.formatAPIDate(new Date(array[index]['PatientBirthday']).getTime()):'';
+          item.PatientBirthday = array[index]['PatientBirthday'] ? this.util.dateFormat(new Date(array[index]['PatientBirthday']), 'yyyy-MM-dd HH:mm') : '';
           item.Operator = array[index]['Operator'];
           item.ExecuteBy = array[index]['ExecuteBy'];
-          item.ExecuteStart = array[index]['ExecuteStart'] ? this.util.formatAPIDate(new Date(array[index]['ExecuteStart']).getTime()): '';
+          item.ExecuteStart = array[index]['ExecuteStart'] ? this.util.dateFormat(new Date(array[index]['ExecuteStart']), 'yyyy-MM-dd HH:mm') : '';
           item.ExecuteEnd = array[index]['ExecuteEnd'];
           item.RelatedBillNo = array[index]['RelatedBillNo'];
           item.DelayReason = array[index]['DelayReason'];
@@ -233,9 +245,9 @@ export class TaskListPage {
           item.DelegateBy = array[index]['DelegateBy'];
           item.DelegateAt = array[index]['DelegateAt'];
           item.String6 = array[index]['String6'];
-          item.CREATEDATE = array[index]['CREATEDATE']? this.util.formatAPIDate(new Date(array[index]['CREATEDATE']).getTime()):'';
-          item.MODIFYDATE = array[index]['MODIFYDATE']? this.util.formatAPIDate(new Date(array[index]['MODIFYDATE']).getTime()):'';
-          item.AssignAt = array[index]['AssignAt'] ? this.util.formatAPIDate(new Date(array[index]['AssignAt']).getTime()):'';
+          item.CREATEDATE = array[index]['CREATEDATE'] ? this.util.dateFormat(new Date(array[index]['CREATEDATE']), 'yyyy-MM-dd HH:mm') : '';
+          item.MODIFYDATE = array[index]['MODIFYDATE'] ? this.util.dateFormat(new Date(array[index]['MODIFYDATE']), 'yyyy-MM-dd HH:mm') : '';
+          item.AssignAt = array[index]['AssignAt'] ? this.util.dateFormat(new Date(array[index]['AssignAt']), 'yyyy-MM-dd HH:mm') : '';
           item.imgs = array[index]['String9'];
           item.String1 = array[index]['String1'];
           item.String3 = array[index]['String3'];
@@ -243,8 +255,20 @@ export class TaskListPage {
           item.BillNo = array[index]['BillNo'];
           item.String10 = array[index]['String10'];
           item.Note = array[index]['Note'];
+          item.DelayBy = array[index]['DelayBy'];
+          if(item.DelayBy) {
+            if (item.DelayBy === '催单') {
+              item.isFirstPush = true; 
+            }else {
+              item.isFirstPush = false;
+            }
+            item.delayByStr = '已催单';
+          }else {
+            item.delayByStr = '';
+          }
+          
           item.State = array[index]['State'];
-          if (item.State === '完工') {
+          if (item.State === '完工' || item.State === '取消') {
             doneArray.push(item);
           } else {
             doingArray.push(item);
@@ -263,13 +287,13 @@ export class TaskListPage {
   //病人运送任务
   onPatientTransferTaskCreate() {
     let isChecked = false;
-    for(let index in this.checkOptionArray) {
+    for (let index in this.checkOptionArray) {
       let item = this.checkOptionArray[index];
-      if(item['isChecked']) {
+      if (item['isChecked']) {
         isChecked = true;
       }
     }
-    if(isChecked) {
+    if (isChecked) {
       this.util.showLoading('创建任务中,请稍候...');
       setTimeout(() => {
         let data = this.getTransferDataForm(TRANSPORT_PATIENT);
@@ -280,43 +304,93 @@ export class TaskListPage {
             this.resetFormData();
             this.getTrackListData(); //刷新列表
           } else {
-            this.showAlert('创建失败,' + result['Message']);
+            this.showAlert(result['Message']);
           }
         }).catch(error => {
           this.util.dismissLoading();
           this.showAlert('创建失败,请稍后重试！');
         });
       }, 500);
-    }else{
+    } else {
       this.showAlert('请至少选择一项检查项!');
     }
-    
+
   }
 
   //标本运送
   onSpecimenTransport() {
     //标本运送
-    this.util.showAlertWithOkhandler('提示', '是否创建标本运送任务','否','是',(data)=>{
+    this.util.showAlertWithOkhandler('提示', '是否创建标本运送任务', '否', '是', (data) => {
+      this.util.showLoading('创建任务中,请稍候...');
       let params = this.getTransferDataForm(TRANSPORT_SPECIMEN);
-      this.api.createTransferTask(params).then(result=>{
+      this.api.createTransferTask(params).then(result => {
+        this.util.dismissLoading();
         if (result['Flag'] === 'S') {
           this.showAlert('创建成功');
           this.getTrackListData(); //刷新列表
         } else {
-          this.showAlert('创建失败,' + result['Message']);
+          this.showAlert(result['Message']);
         }
-      }).catch(error=>{
+      }).catch(error => {
         this.util.dismissLoading();
-          this.showAlert('创建失败,请稍后重试！');
+        this.showAlert('创建失败,请稍后重试！');
       })
-    })
-    
+    });
+
+  }
+
+  //药品运送
+  onDrugTransferClicked() {
+    this.util.showAlertWithOkhandler('提示', '是否创建药品运送任务', '否', '是', (data) => {
+      let params = this.getTransferDataForm(TRANSPORT_DRUG);
+      this.util.showLoading('创建任务中,请稍候...');
+      this.api.createTransferTask(params).then(result => {
+        this.util.dismissLoading();
+        if (result['Flag'] === 'S') {
+          this.showAlert('创建成功');
+          this.getTrackListData(); //刷新列表
+        } else {
+          this.showAlert(result['Message']);
+        }
+      }).catch(error => {
+        this.util.dismissLoading();
+        this.showAlert('创建失败,请稍后重试！');
+      })
+    });
+  }
+
+  //物品运送
+  onCommodityTransferClicked() {
+    this.showAlert('尚未启用 请致电运送中心!');
+  }
+
+  //标本运送催单
+  onSpecimenPushTask() {
+    this.util.showAlertWithOkhandler(
+      '提示', '确认是否催单', '取消', '确认', (data) => {
+        this.util.showLoading('正在提交,请稍候...');
+        setTimeout(() => {
+          this.api.PushTransferTaskByID(this.api.userInfo['DeptCode']).then(data => {
+            this.util.dismissLoading();
+            if (data['Flag'] === 'S') {
+              this.showAlert('催单成功');
+              this.getTrackListData();
+            } else {
+              this.showAlert(data['Message']);
+            }
+          }).catch(error => {
+            this.util.dismissLoading();
+            this.showAlert(JSON.stringify(error));
+          });
+        }, 500);
+      }
+    );
   }
 
   //运送任务表单结构
   getTransferDataForm(transferType: string): Object {
 
-    let data = { "HospitalCode": "03023" };
+    let data = { "HospitalCode": this.api.HOSPITALCODE };
     data['FromLocation'] = this.api.userInfo['DeptName'];
     data['PatientOld'] = 99;
     data['AssignAlertBefore'] = 5;
@@ -326,8 +400,8 @@ export class TaskListPage {
     data['EmergencyLevelNo'] = 'EL002';
     data['patientname'] = '';
     data['CreatedByCode'] = this.api.userInfo['Account'];
-    let checkDateStr = this.util.formatAPIDate(new Date(this.checkDate).getTime());
-    data['CreateDatetime'] = checkDateStr;
+    
+    
     data['BillType'] = '即时';
     switch (transferType) {
       //病人运送
@@ -336,14 +410,19 @@ export class TaskListPage {
         data['TransferTools'] = this.transportOption;
         data['FromSickbed'] = this.bedNum;
         data['patientname'] = this.patientName;
-        data['CheckTime'] = checkDateStr;
+        let checkDateStr = ''
+        if(this.checkDate) {
+          let checkDateStr = this.util.formatAPIDate(new Date(this.checkDate).getTime());
+        }
+        //如果用户没有选择时间，给一个默认初始时间
+        data['CheckTime'] = checkDateStr? checkDateStr: this.util.formatAPIDate(0);
         let picStr = '';
-        for(let index in this.picArray) {
+        for (let index in this.picArray) {
           let item = this.picArray[index];
           picStr += item['name'] + ',';
         }
-        if(picStr) {
-          data['String9']= picStr.substring(0, picStr.length -1);
+        if (picStr) {
+          data['String9'] = picStr.substring(0, picStr.length - 1);
         }
         let toLocation = '';
         let checkOptions = '';
@@ -352,7 +431,7 @@ export class TaskListPage {
           let item = this.checkOptionArray[index];
           if (item['isChecked']) {
             toLocation += item['PROPNAME'] + ',';
-            checkOptions += item['PROPSTRING6'] + ','
+            checkOptions += item['PROPSTRING7'] + ','
           }
 
         }
@@ -441,50 +520,80 @@ export class TaskListPage {
     this.picArray = [];
   }
 
-  showPicture(item:PictureForUpload) {
+  showPicture(item: PictureForUpload) {
     //base64显示图片
     window.open(item.url);
   }
 
-  listItemClicked(item:TaskListItemModel) {
-    this.navCtrl.push('TaskInfoPage',{data:item});
+  listItemClicked(item: TaskListItemModel) {
+    this.navCtrl.push('TaskInfoPage', { data: item });
+  }
+
+  onDateTimeClicked() {
+    this.initDefaultTime();
   }
 
   //催单
-  pushTransferBill(event,item:TaskListItemModel) {
+  pushTransferBill(event, item: TaskListItemModel) {
     event.stopPropagation();
     this.util.showAlertWithOkhandler(
-      '提示','确认是否催单','取消','确认',(data)=>{
+      '提示', '确认是否催单', '取消', '确认', (data) => {
         this.util.showLoading('正在提交,请稍候...');
-          setTimeout(() => {
-            this.api.PushTransferTaskByID(item.BillNo).then(data=>{
-              this.util.dismissLoading();
-              if(data['Flag'] === 'S') {
-                this.showAlert('催单成功');
-              }else {
-                this.showAlert('催单失败,'+data['Message']);
-              }
-            }).catch(error=>{
-              this.util.dismissLoading();
-              this.showAlert(JSON.stringify(error));
-            });
-          }, 500);
+        setTimeout(() => {
+          this.api.PushTransferTaskByID(item.BillNo).then(data => {
+            this.util.dismissLoading();
+            if (data['Flag'] === 'S') {
+              this.showAlert('催单成功');
+              this.getTrackListData();
+            } else {
+              this.showAlert(data['Message']);
+            }
+          }).catch(error => {
+            this.util.dismissLoading();
+            this.showAlert(JSON.stringify(error));
+          });
+        }, 500);
       }
     );
   }
 
-  cancelTransferBill(event,item:TaskListItemModel) {
+  cancelTransferBill(event, item: TaskListItemModel) {
     event.stopPropagation();
     this.util.showAlertWithOkhandler(
-      '提示','确认是否取消任务','取消','确认',(data)=>{
+      '提示', '确认是否取消任务', '取消', '确认', (data) => {
+        this.util.showLoading('正在提交,请稍候...');
+        setTimeout(() => {
+          this.api.CancelTransferTask(item.BillNo).then(data => {
+            this.util.dismissLoading();
+            if (data['Flag'] === 'S') {
+              this.showAlert('任务取消成功');
+              this.getTrackListData();
+            } else {
+              this.showAlert(data['Message']);
+            }
+          }).catch(error => {
+            this.util.dismissLoading();
+            this.showAlert(JSON.stringify(error));
+          });
+        }, 500);
       }
     );
   }
 
+  //刷新页面
   refreshList() {
     this.doingTaskList = [];
     this.doneTaskList = [];
     this.getTrackListDataShowLoading();
+    if (!(this.transportTools.length > 0)) {
+      this.getTransferTools();
+    }
+    if (!(this.checkOptionArray.length > 0)) {
+      this.getCheckItemByHospitalDeptCode();
+    }
+    if(!(this.drugTypies.length > 0)) {
+      this.getDrugTypeByHospitalDept();
+    }
   }
 
 
@@ -531,7 +640,7 @@ export class TaskListPage {
 export class PictureForUpload {
   name: string = '';
   url: string;
-  thumbImgPath:string = ''; 
+  thumbImgPath: string = '';
   constructor() {
 
   }
@@ -562,16 +671,19 @@ export class TaskListItemModel {
   DelegateReason: string = '';
   DelegateBy: string = '';
   DelegateAt: string = '';
-  imgs:string = '';
+  DelayBy: string = '';//催单状态
+  delayByStr: string = '';
+  isFirstPush:boolean = true;
+  imgs: string = '';
   String6: string = '';
   CREATEDATE: string = '';
   MODIFYDATE: string = '';
-  String1:string = '';
-  String3:string = '';
-  EmergencyLevel:string = '';
-  AssignAt:string = '';
-  Note:string = '';
-  String10:string = '';//检查项目
+  String1: string = '';
+  String3: string = '';
+  EmergencyLevel: string = '';
+  AssignAt: string = '';
+  Note: string = '';
+  String10: string = '';//检查项目
   constructor() {
 
   }

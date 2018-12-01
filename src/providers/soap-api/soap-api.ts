@@ -12,6 +12,8 @@ import { ApiProvider } from '../api/api';
 @Injectable()
 export class SoapApiProvider {
 
+  HOSPITALCODE:string = '03013';
+
   BASE_URL = 'http://123.206.111.21/htmwstest/';
 
   //缩略图路径
@@ -40,11 +42,8 @@ export class SoapApiProvider {
    * 获取追踪任务列表
    */
   public getTrackList() {
-    // let data = {"HospitalCode": "03023","DeptCode":"03023010403", 
-    // "OperatorCode":"0302320015", 
-    // "DateTimeFrom":"2018-09-23 00:00:00","DateTimeTo":"2018-09-23 23:00:00"}
     let params = {};
-    params['HospitalCode'] = '03023';
+    params['HospitalCode'] = this.HOSPITALCODE;
     params['DeptCode'] = this.userInfo['DeptCode'];
     params['OperatorCode'] = '';
     let now = new Date();
@@ -83,15 +82,22 @@ export class SoapApiProvider {
     return this.doSoapByActionName('NewTransferTaskForiPad',JSON.stringify(formdata));
   }
 
-  public CancelTransferTask(){
 
+  /**
+   * 取消任务
+   * @param params 
+   */
+  public CancelTransferTask(billNo:string){
+    let params = {"TransferTaskBillNo": billNo,"CancelReason":"cancel","CanceledByCode":this.userInfo['Account'], "CanceledDatetime":this.util.formatAPIDate(new Date().getTime())}
+    return this.doSoapByActionName('CancelTransferTask',JSON.stringify(params));
   }
 
   /**
    * 查询医院的科室与检查项目
    */
-  public GetCheckItemByHospitalDeptCode():Promise<Object> {
-    return this.doSoapByActionName('GetCheckItemByHospitalDeptCode','{"HospitalCode": "03023","DeptCode":""}');
+  public GetCheckItemByHospitalDeptCodeForIpad():Promise<Object> {
+    let params = {"HospitalCode": this.HOSPITALCODE,"DeptCode":""};
+    return this.doSoapByActionName('GetCheckItemByHospitalDeptCodeForiPad', JSON.stringify(params));
   }
 
   /**
@@ -105,7 +111,8 @@ export class SoapApiProvider {
    * 查询医院的药品分类与药房
    */
   public GetDrugTypeByHospitalDeptCode():Promise<Object> {
-    return this.doSoapByActionName('GetDrugTypeByHospitalDeptCode','{"HospitalCode": "03023","DeptCode":""}');
+    let params = {"HospitalCode": this.HOSPITALCODE,"DeptCode":""};
+    return this.doSoapByActionName('GetDrugTypeByHospitalDeptCode', JSON.stringify(params));
   }
 
   /**

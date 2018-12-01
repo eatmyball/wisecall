@@ -72,6 +72,7 @@ export class TaskInfoPage {
               this.util.dismissLoading();
               if(data['Flag'] === 'S') {
                 this.showAlert('催单成功');
+                this.navCtrl.pop();
               }else {
                 this.showAlert('催单失败,'+data['Message']);
               }
@@ -87,7 +88,22 @@ export class TaskInfoPage {
   cancelTransferBill(event) {
     event.stopPropagation();
     this.util.showAlertWithOkhandler(
-      '提示','是否取消任务','取消','确认',(data)=>{
+      '提示','确认是否取消任务','取消','确认',(data)=>{
+        this.util.showLoading('正在提交,请稍候...');
+        setTimeout(() => {
+          this.api.CancelTransferTask(this.data.BillNo).then(data=>{
+            this.util.dismissLoading();
+            if(data['Flag'] === 'S') {
+              this.showAlert('任务取消成功');
+              this.navCtrl.pop();
+            }else {
+              this.showAlert('操作失败,'+data['Message']);
+            }
+          }).catch(error=>{
+            this.util.dismissLoading();
+            this.showAlert(JSON.stringify(error));
+          });
+        }, 500);
       }
     );
   }

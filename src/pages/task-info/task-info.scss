@@ -58,5 +58,10 @@ page-task-info {
         display:flex;
         align-items: center;
         flex-wrap: wrap;
+        .div-img-item{
+            height: 50px;
+            width: 50px;
+            margin: 3px;
+          }
     }
 }
