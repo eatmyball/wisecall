@@ -1,3 +1,4 @@
+import { Autostart } from '@ionic-native/autostart';
 import { LocalDbProvider } from './../providers/local-db/local-db';
 import { SoapApiProvider } from './../providers/soap-api/soap-api';
 import { UtilityProvider, TOAST_POSITION } from './../providers/utility/utility';
@@ -20,6 +21,7 @@ export class MyApp {
 
   deptName:string = '';
   userName:string = '';
+  version:string='';
 
   constructor(platform: Platform, 
     private statusBar: StatusBar, 
@@ -28,7 +30,8 @@ export class MyApp {
     private menuCtrl:MenuController,
     private events:Events,
     private api:SoapApiProvider,
-    private local:LocalDbProvider
+    private local:LocalDbProvider,
+    private autoStart:Autostart
     ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -36,8 +39,11 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.statusBar.backgroundColorByHexString('#0070E0');
       this.splashScreen.hide();
+      //允许自启动
+      this.autoStart.enable();
       this.menuCtrl.enable(false);
       this.initEvents();
+      this.version = this.api.version;
     });
 
     this.initMenuList();
@@ -63,7 +69,7 @@ export class MyApp {
       return;
     }
     else if(page['name'] === '更新') {
-      window.open('about:blank');
+      window.open('http://info.liontown.cn/htmprd/apk/wisecall.apk');
       return;
     }
     else {

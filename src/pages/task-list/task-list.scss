@@ -48,12 +48,14 @@ page-task-list {
         display: flex;
         padding:1px 5px;
         align-items: center;
+        min-height: 38px;
         font-size: 1.2rem !important;
         border-bottom: 0.5px solid #A6BBC8;
       }
       .div-item-row-no-border{
         display: flex;
         padding:1px 5px;
+        min-height: 38px;
         align-items: center;
         font-size: 1.2rem !important;
       }
@@ -246,6 +248,23 @@ page-task-list {
   }
   .span-push-second{
     color: #ED4249;
+  }
+
+  .div-tools-item-default {
+    font-size: 1.0rem;
+    padding: 5px 9px;
+    margin: 0px 1px;
+    background: rgba(0, 0, 0, 0.12);
+    color: rgba(0, 0, 0, 0.87);
+    border-radius: 3px;
+  }
+  .div-tools-item-checked {
+    font-size: 1.0rem;
+    padding: 5px 9px;
+    margin: 0px 1px;
+    background-color: #0070E0;
+    color: #fff;
+    border-radius: 3px;
   }
 
   .div-task-list-item-top{

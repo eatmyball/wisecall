@@ -12,6 +12,8 @@ import { ApiProvider } from '../api/api';
 @Injectable()
 export class SoapApiProvider {
 
+  version:string = '0.0.4(2018120202)';
+
   HOSPITALCODE:string = '03013';
 
   BASE_URL = 'http://123.206.111.21/htmwstest/';

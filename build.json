@@ -1,0 +1,18 @@
+{
+    "android": {
+        "debug": {
+            "keystore": "./wisecall.keystore",
+            "storePassword": "123456",
+            "alias": "wisecall.test",
+            "password" : "123456",
+            "keystoreType": ""
+        },
+        "release": {
+            "keystore": "./wisecall.keystore",
+            "storePassword": "123456",
+            "alias": "wisecall.test",
+            "password" : "123456",
+            "keystoreType": ""
+        }
+    }
+}

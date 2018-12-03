@@ -14,6 +14,7 @@ import { BackkeyProvider } from '../providers/backkey/backkey';
 import { HttpModule } from '@angular/http';
 import { SoapApiProvider } from '../providers/soap-api/soap-api';
 import { LocalDbProvider } from '../providers/local-db/local-db';
+import { Autostart } from '@ionic-native/autostart';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { LocalDbProvider } from '../providers/local-db/local-db';
     Camera,
     BackkeyProvider,
     SoapApiProvider,
-    LocalDbProvider
+    LocalDbProvider,
+    Autostart
   ]
 })
 export class AppModule {}

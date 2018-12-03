@@ -50,12 +50,12 @@
 
             <div class="div-item-row">
               <div class="div-item-row-half">
-                <ion-item no-lines class="my-ion-item">
-                  <ion-label class="my-lable">运送工具:</ion-label>
-                  <ion-select [(ngModel)]="transportOption" okText="确定" cancelText="取消">
-                    <ion-option *ngFor="let item of transportTools"  value="{{item.PROPNAME}}">{{item.PROPNAME}}</ion-option>
-                  </ion-select>
-                </ion-item>
+                <div class="div-title">运送工具:</div>
+                <div *ngFor="let item of transportTools; let i = index" [ngClass]="item.isChecked? 'div-tools-item-checked':'div-tools-item-default'"
+                (click)="onTransferToolsClicked(i)"
+                >
+                  {{item.name}}
+                </div>
               </div>
               <div class="div-item-row-half">
                 <ion-item no-lines class="my-ion-item">
@@ -120,7 +120,7 @@
               <div class="div-item-row-half">
                 <ion-item no-lines class="my-ion-item">
                   <ion-label class="my-lable">药房</ion-label>
-                  <ion-select [(ngModel)]="drugOption" okText="确定" cancelText="取消">
+                  <ion-select okText="确定" cancelText="取消">
                     <ion-option *ngFor="let item of drugTypies"  value="{{item.PropString7}}">{{item.PropString7}}</ion-option>
                   </ion-select>
                 </ion-item>
@@ -131,7 +131,6 @@
           <div class="div-block-bottom-border" style="margin-top:20px">
             <div class="div-item-row" style="justify-content: space-between">
               <div class="div-text">物品运送</div>
-              <button ion-button small (click)="onCommodityTransferClicked()">提交</button>
             </div>
             <div class="div-checkbox-container">
                 <div class="div-title">运送物品</div>
@@ -139,27 +138,42 @@
                   (click)="onCheckItemClicked(item)">
                   {{item.name}}
                 </ion-chip>
+                <div style="width: 100%; display: flex;align-items: center;">
+                  <ion-chip [ngClass]="isOther? 'div-check-item-checked':'div-check-item-default'"
+                  (click)="onCommodityOthersChecked()">
+                    其他
+                  </ion-chip>
+                  <ion-input [disabled]="!isOther" type="text" class="my-ion-input" placeholder="请输入其他物品" [(ngModel)]="otherCommodity"></ion-input>
+                </div>
             </div>
-            <div class="div-item-row-no-border">
-                <div class="div-item-row-half">
-                  <ion-item no-lines class="my-ion-item">
-                    <ion-label class="my-lable">预约时间</ion-label>
-                    <ion-datetime displayFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"></ion-datetime>
-                  </ion-item>
-                </div>
-                <div class="div-item-row-half">
-                  <ion-item no-lines class="my-ion-item">
-                    <ion-label class="my-lable">送达科室</ion-label>
-                    <ion-select [(ngModel)]="drugOption" okText="确定" cancelText="取消">
-                        <ion-option value="氧气站">氧气站</ion-option>
-                        <ion-option value="信息科">信息科</ion-option>
-                        <ion-option value="设备科">设备科</ion-option>
-                        <ion-option value="设备科">机修组</ion-option>
-                      </ion-select>
-                  </ion-item>
-                </div>
+            <div class="div-item-row" *ngIf="false" >
+              <div class="div-item-row-half">
+                <ion-item no-lines class="my-ion-item">
+                  <ion-label class="my-lable">预约时间</ion-label>
+                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate" (ionFocus)="onDateTimeClicked()"></ion-datetime>
+                </ion-item>
               </div>
+              <div class="div-item-row-half" *ngIf="false" >
+                <ion-item no-lines class="my-ion-item">
+                  <ion-label class="my-lable">送/取物品</ion-label>
+                  <ion-toggle [(checked)]="isSendCommodity"></ion-toggle>
+                </ion-item>
+              </div>
+          </div>
+          <div class="div-item-row">
               
+              <div class="div-title">备注:</div>
+              <ion-input type="text" [(ngModel)]="commodityComments" placeholder="请输入规格，数量，科室"></ion-input>
+         
+          </div>
+          <div class="div-item-row-no-border">
+              <div class="div-item-row-half">
+                <button ion-button small (click)="onCommodityTransferClicked(false)" style="width:100%">从本病区取</button>
+              </div>
+              <div class="div-item-row-half">
+                <button ion-button small (click)="onCommodityTransferClicked(true)" style="width:100%">送到本病区</button>
+              </div>
+          </div>
           </div>
         </div>
       </div>

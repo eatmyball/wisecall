@@ -5,6 +5,7 @@
             <img class="img-avatar" src="./assets/imgs/avatar_m.png"/>
             <p class="name">{{deptName}}</p>
             <p class="e-mail">{{userName}}</p>
+            <div style="font-size:1.2rem;">当前版本:{{version}}</div>
           </div>
           <ion-list no-lines>
             <button menuClose="left" ion-item detail-none *ngFor="let item of menuListData" (click)="openPage(item)">

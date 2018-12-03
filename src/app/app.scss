@@ -17,17 +17,19 @@
 
 #menu-material {
     .menu-header {
-      padding: 5px 15px;
+      padding: 5px 5px;
       background-image: url('../assets/imgs/material-design-background.jpg');
       background-size: cover;
       color: white;
       .name {
-        font-weight: 500;
+        font-weight: 400;
         margin-bottom: 3px;
+        font-size: 1.3rem;
       }
       .e-mail {
         margin-top: 0;
         margin-bottom: 5px;
+        font-size: 1.3rem;
       }
     }
     .img-avatar {

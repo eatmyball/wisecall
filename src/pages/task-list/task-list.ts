@@ -44,7 +44,8 @@ export class TaskListPage {
   //检查项目
   checkOptionArray = [];
   //运送工具
-  transportTools = [];
+  transportTools = [{ name: '轮椅', isChecked: true }, { name: '平车', isChecked: false },
+  { name: '拉床', isChecked: false }, { name: '步行', isChecked: false }];
   transportOption: string = '轮椅';
   //预约时间
   checkDate: string = '';
@@ -54,16 +55,20 @@ export class TaskListPage {
   comments: string = '';
 
   //送药运送表单内容
-  //药房类型
-  drugOption: string = '';
   drugTypies = [];
 
   //物品运送
-  commodityArray = [{ name: '氧气', isChecked: false }, { name: 'PDA', isChecked: false },
-  { name: '温仪', isChecked: false }, { name: '监护仪', isChecked: false },
-  { name: '压力表', isChecked: false }, { name: '轮椅', isChecked: false },
-  { name: '微波炉', isChecked: false }, { name: '其他', isChecked: false }];
-
+  commodityArray = [{ name: '氧气', isChecked: false }, { name: '甲苯', isChecked: false },
+  { name: '甲醛', isChecked: false }, { name: '微波炉', isChecked: false },{ name: '监护仪', isChecked: false },
+  { name: '平车', isChecked: false }, { name: '轮椅', isChecked: false },{ name: 'PDA', isChecked: false },
+  { name: '试管', isChecked: false },{ name: '红光治疗仪', isChecked: false }, { name: '微泵', isChecked: false },
+  { name: '气泵', isChecked: false },{ name: '气垫床', isChecked: false },{ name: '电话线', isChecked: false },
+  { name: '营养液', isChecked: false },{ name: '盐水', isChecked: false }];
+  isOther:boolean = false;
+  otherCommodity:string = '';
+  commodityComments:string = '';
+  //默认送物品
+  isSendCommodity:boolean = true;
   //录音相关
   MAX_RECORD_TIME = 60;
   text_record: string = '录音';
@@ -163,21 +168,21 @@ export class TaskListPage {
    * 选项类数据初始化
    */
   initBaseDatas() {
-    this.getTransferTools();
+    // this.getTransferTools();
     this.getCheckItemByHospitalDeptCode();
     this.getDrugTypeByHospitalDept();
   }
 
   //运送工具
-  getTransferTools() {
+  // getTransferTools() {
 
-    this.api.GetTransferTools().then(data => {
-      if (data['Flag'] === 'S') {
-        this.transportTools = data['dsData']['Table'];
-      }
-    }).catch(error => {
-    });
-  }
+  //   this.api.GetTransferTools().then(data => {
+  //     if (data['Flag'] === 'S') {
+  //       this.transportTools = data['dsData']['Table'];
+  //     }
+  //   }).catch(error => {
+  //   });
+  // }
 
   //检查项目
   getCheckItemByHospitalDeptCode() {
@@ -360,8 +365,62 @@ export class TaskListPage {
   }
 
   //物品运送
-  onCommodityTransferClicked() {
-    this.showAlert('尚未启用 请致电运送中心!');
+  onCommodityTransferClicked(isSend) {
+    this.isSendCommodity = isSend;
+    let isChecked = false;
+    for (let index in this.commodityArray) {
+      let item = this.commodityArray[index];
+      if (item['isChecked']) {
+        isChecked = true;
+      }
+    }
+    if (isChecked||this.isOther) {
+      if(this.isOther) {
+        if(this.otherCommodity) {
+          this.util.showLoading('创建任务中,请稍候...');
+          setTimeout(() => {
+            let data = this.getTransferDataForm(TRANSPORT_COMMODITY);
+            this.api.createTransferTask(data).then(result => {
+              this.util.dismissLoading();
+              if (result['Flag'] === 'S') {
+                this.showAlert('创建成功');
+                this.resetFormData();
+                this.getTrackListData(); //刷新列表
+              } else {
+                this.showAlert(result['Message']);
+              }
+            }).catch(error => {
+              this.util.dismissLoading();
+              this.showAlert('创建失败,请稍后重试！');
+            });
+          }, 500);
+        }else {
+          this.showAlert('请输入其他运送物品的信息!');
+        }
+      }else {
+        this.util.showLoading('创建任务中,请稍候...');
+          setTimeout(() => {
+            let data = this.getTransferDataForm(TRANSPORT_COMMODITY);
+            this.api.createTransferTask(data).then(result => {
+              this.util.dismissLoading();
+              if (result['Flag'] === 'S') {
+                this.showAlert('创建成功');
+                this.resetFormData();
+                this.getTrackListData(); //刷新列表
+              } else {
+                this.showAlert(result['Message']);
+              }
+            }).catch(error => {
+              this.util.dismissLoading();
+              this.showAlert('创建失败,请稍后重试！');
+            });
+          }, 500);
+      }
+     
+    } else {
+      this.showAlert('请至少选择一项检查项!');
+    }
+
   }
 
   //标本运送催单
@@ -391,7 +450,6 @@ export class TaskListPage {
   getTransferDataForm(transferType: string): Object {
 
     let data = { "HospitalCode": this.api.HOSPITALCODE };
-    data['FromLocation'] = this.api.userInfo['DeptName'];
     data['PatientOld'] = 99;
     data['AssignAlertBefore'] = 5;
     data['ExecuteAlertBefore'] = 10;
@@ -400,12 +458,11 @@ export class TaskListPage {
     data['EmergencyLevelNo'] = 'EL002';
     data['patientname'] = '';
     data['CreatedByCode'] = this.api.userInfo['Account'];
-    
-    
     data['BillType'] = '即时';
     switch (transferType) {
       //病人运送
       case TRANSPORT_PATIENT:
+        data['FromLocation'] = this.api.userInfo['DeptName'];
         data['TargetType'] = "病人";
         data['TransferTools'] = this.transportOption;
         data['FromSickbed'] = this.bedNum;
@@ -426,7 +483,6 @@ export class TaskListPage {
         }
         let toLocation = '';
         let checkOptions = '';
-        console.log('checkOptions' + JSON.stringify(this.checkOptionArray));
         for (let index in this.checkOptionArray) {
           let item = this.checkOptionArray[index];
           if (item['isChecked']) {
@@ -442,12 +498,34 @@ export class TaskListPage {
         data['String10'] = checkOptions;
         break;
       case TRANSPORT_SPECIMEN:
+        data['FromLocation'] = this.api.userInfo['DeptName'];
         data['TargetType'] = "标本";
         break;
       case TRANSPORT_DRUG:
+        data['FromLocation'] = this.api.userInfo['DeptName'];
         data['TargetType'] = "药品";
         break;
       case TRANSPORT_COMMODITY:
+        //如果用户没有选择时间，给一个默认初始时间
+        data['CheckTime'] = checkDateStr? checkDateStr: this.util.formatAPIDate(0);
+        let commodityStr = '';
+        for (let index in this.commodityArray) {
+          let item = this.commodityArray[index];
+          if (item['isChecked']) {
+            commodityStr += item['name'] + ',';
+          }
+        }
+        commodityStr = commodityStr.substring(0, commodityStr.length - 1);
+        commodityStr = this.isOther&&this.otherCommodity? commodityStr+','+this.otherCommodity:commodityStr;
+        data['String10'] = commodityStr;
+        if(this.isSendCommodity) {
+          data['ToLocation'] = this.api.userInfo['DeptName'];
+          data['FromLocation'] = '';
+        }else{
+          data['FromLocation'] = this.api.userInfo['DeptName'];
+          data['ToLocation'] = '';
+        }
+        data['Note'] = this.commodityComments;
         data['TargetType'] = "物品";
         break;
     }
@@ -457,7 +535,24 @@ export class TaskListPage {
 
   onCheckItemClicked(item) {
     item.isChecked = !item.isChecked;
-    console.log('checkOptions' + JSON.stringify(this.checkOptionArray));
+  }
+
+  onCommodityOthersChecked() {
+    this.isOther = !this.isOther;
+
+  }
+
+  onTransferToolsClicked(index) {
+    for(let i in this.transportTools) {
+      let item = this.transportTools[i];
+      if(Number(i) === index) {
+        item.isChecked = true;
+        this.transportOption = item.name;
+      }else {
+        item.isChecked = false;
+      }
+    }
+
   }
 
   takePhoto() {
@@ -498,6 +593,8 @@ export class TaskListPage {
 
   resetFormData() {
     //病人运送表单内容
+    //时间
+    this.checkDate = '';
     //床号
     this.bedNum = ''
     //病人姓名
@@ -514,6 +611,8 @@ export class TaskListPage {
     this.commodityArray.forEach((item, index) => {
       item['isChecked'] = false;
     });
+    //物品运送备注
+    this.commodityComments = '';
   }
 
   removeAll() {
@@ -585,9 +684,9 @@ export class TaskListPage {
     this.doingTaskList = [];
     this.doneTaskList = [];
     this.getTrackListDataShowLoading();
-    if (!(this.transportTools.length > 0)) {
-      this.getTransferTools();
-    }
+    // if (!(this.transportTools.length > 0)) {
+    //   this.getTransferTools();
+    // }
     if (!(this.checkOptionArray.length > 0)) {
       this.getCheckItemByHospitalDeptCode();
     }
