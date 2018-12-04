@@ -80,6 +80,21 @@ export class UtilityProvider {
     alertWindow.present();
   }
 
+  showAlertOneBtn(title:string, msg:string, cancelTxt:string, okhandler:(value: any) => boolean | void) {
+    let alertWindow = this.alert.create({
+      title:title,
+      message:msg,
+      buttons:[
+        {
+          text:cancelTxt,
+          role:'cancel',
+          handler:okhandler
+        }
+      ]
+    });
+    alertWindow.present();
+  }
+
   showAlertWithOkhandler(title:string, msg:string, cancelTxt:string, okText:string, okhandler:(value: any) => boolean | void) {
     let alertWindow = this.alert.create({
       title:title,

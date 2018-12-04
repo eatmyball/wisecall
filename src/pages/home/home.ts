@@ -12,6 +12,7 @@ export class HomePage {
 
   username:string = '';
   password:string = '';
+  checkOptionArray = [];
 
   constructor(public navCtrl: NavController,
     private api:SoapApiProvider,
@@ -46,15 +47,14 @@ export class HomePage {
 
     setTimeout(() => {
       this.api.userLogin({'Account':this.username, 'Password':this.password}).then(data=>{
-        this.util.dismissLoading();
+        //登录成功
         if(data['Flag'] === 'S') {
           //保存用户名密码
           this.local.save('account', this.username);
           this.local.save('password', this.password);
           this.api.setUserInfo(data['dsData']['Table1'][0]);
-          //登录成功事件
-          this.events.publish('USER_LOGIN_SUCCESS');
-          this.navCtrl.setRoot('TaskListPage');
+          //获取检查项数据列表
+          this.getCheckItemByHospitalDeptCode();
         }else {
           this.showAlert(data['Message']);
         }
@@ -64,6 +64,33 @@ export class HomePage {
       });
     }, 500);
   }
+
+    //检查项目
+    getCheckItemByHospitalDeptCode() {
+      this.api.GetCheckItemByHospitalDeptCodeForIpad().then(data => {
+        this.util.dismissLoading();
+        if (data['Flag'] === 'S') {
+          let datas = data['dsData']['Table'];
+          for (let index in datas) {
+            let item = datas[index];
+            item['isChecked'] = false;
+            this.checkOptionArray.push(item);
+          }
+          //拿到检查项，则登录成功
+          if(this.checkOptionArray.length > 0) {
+            this.events.publish('USER_LOGIN_SUCCESS');
+            this.navCtrl.setRoot('TaskListPage',{data:this.checkOptionArray});
+          }else {
+            this.showAlert('登录失败，请稍后重试!');
+          }
+        }else{
+          this.showAlert('登录失败，请稍后重试!');
+        }
+      }).catch(error => {
+        this.util.dismissLoading();
+        this.showAlert('登录失败，请稍后重试!');
+      });
+    }
 
   showAlert(msg:string) {
     this.util.showAlert('提示',msg,'确定');

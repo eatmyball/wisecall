@@ -1,6 +1,6 @@
 import { UtilityProvider, TOAST_POSITION } from './../../providers/utility/utility';
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, Scroll } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, Scroll, Platform } from 'ionic-angular';
 import { SoapApiProvider } from '../../providers/soap-api/soap-api';
 import * as Base64 from 'base64-js';
 
@@ -55,7 +55,7 @@ export class TaskListPage {
   comments: string = '';
 
   //送药运送表单内容
-  drugTypies = [];
+  // drugTypies = [];
 
   //物品运送
   commodityArray = [{ name: '氧气', isChecked: false }, { name: '甲苯', isChecked: false },
@@ -90,9 +90,11 @@ export class TaskListPage {
     public navParams: NavParams,
     private menuCtrl: MenuController,
     private util: UtilityProvider,
-    private api: SoapApiProvider
+    private api: SoapApiProvider,
+    private platform:Platform
   ) {
     // this.initDefaultTime();
+    this.checkOptionArray = this.navParams.get('data');
   }
 
 
@@ -169,8 +171,16 @@ export class TaskListPage {
    */
   initBaseDatas() {
     // this.getTransferTools();
-    this.getCheckItemByHospitalDeptCode();
-    this.getDrugTypeByHospitalDept();
+    // this.getCheckItemByHospitalDeptCode();
+    // this.getDrugTypeByHospitalDept();
+    if(this.checkOptionArray&&this.checkOptionArray.length > 0) {
+      console.log('登录成功!');
+    }else {
+      this.util.dismissLoading();
+      this.util.showAlertOneBtn('提示','数据初始化异常,请重新登录!','确定',(data)=>{
+        this.platform.exitApp();
+      });
+    }
   }
 
   //运送工具
@@ -184,29 +194,15 @@ export class TaskListPage {
   //   });
   // }
 
-  //检查项目
-  getCheckItemByHospitalDeptCode() {
-    this.api.GetCheckItemByHospitalDeptCodeForIpad().then(data => {
-      if (data['Flag'] === 'S') {
-        let datas = data['dsData']['Table'];
-        for (let index in datas) {
-          let item = datas[index];
-          item['isChecked'] = false;
-          this.checkOptionArray.push(item);
-        }
-      }
-    }).catch(error => {
-    });
-  }
   //药房类型
-  getDrugTypeByHospitalDept() {
-    this.api.GetDrugTypeByHospitalDeptCode().then(data => {
-      if (data['Flag'] === 'S') {
-        this.drugTypies = data['dsData']['Table'];
-      }
-    }).catch(error => {
-    });
-  }
+  // getDrugTypeByHospitalDept() {
+  //   this.api.GetDrugTypeByHospitalDeptCode().then(data => {
+  //     if (data['Flag'] === 'S') {
+  //       this.drugTypies = data['dsData']['Table'];
+  //     }
+  //   }).catch(error => {
+  //   });
+  // }
 
 
   //第一次打开，有刷新效果
@@ -684,15 +680,6 @@ export class TaskListPage {
     this.doingTaskList = [];
     this.doneTaskList = [];
     this.getTrackListDataShowLoading();
-    // if (!(this.transportTools.length > 0)) {
-    //   this.getTransferTools();
-    // }
-    if (!(this.checkOptionArray.length > 0)) {
-      this.getCheckItemByHospitalDeptCode();
-    }
-    if(!(this.drugTypies.length > 0)) {
-      this.getDrugTypeByHospitalDept();
-    }
   }
 
 
