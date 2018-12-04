@@ -25,7 +25,7 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="StatusBarBackgroundColor" value="#0070E0" />
+    <preference name="StatusBarBackgroundColor" value="#1F8CF1" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
     <preference name="KeyboardShrinksView" value="true" />
     <preference name="DisableScrollingWhenKeyboardShrinksView" value="true" />

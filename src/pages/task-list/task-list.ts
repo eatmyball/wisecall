@@ -59,16 +59,16 @@ export class TaskListPage {
 
   //物品运送
   commodityArray = [{ name: '氧气', isChecked: false }, { name: '甲苯', isChecked: false },
-  { name: '甲醛', isChecked: false }, { name: '微波炉', isChecked: false },{ name: '监护仪', isChecked: false },
-  { name: '平车', isChecked: false }, { name: '轮椅', isChecked: false },{ name: 'PDA', isChecked: false },
-  { name: '试管', isChecked: false },{ name: '红光治疗仪', isChecked: false }, { name: '微泵', isChecked: false },
-  { name: '气泵', isChecked: false },{ name: '气垫床', isChecked: false },{ name: '电话线', isChecked: false },
-  { name: '营养液', isChecked: false },{ name: '盐水', isChecked: false }];
-  isOther:boolean = false;
-  otherCommodity:string = '';
-  commodityComments:string = '';
+  { name: '甲醛', isChecked: false }, { name: '微波炉', isChecked: false }, { name: '监护仪', isChecked: false },
+  { name: '平车', isChecked: false }, { name: '轮椅', isChecked: false }, { name: 'PDA', isChecked: false },
+  { name: '试管', isChecked: false }, { name: '红光治疗仪', isChecked: false }, { name: '微泵', isChecked: false },
+  { name: '气泵', isChecked: false }, { name: '气垫床', isChecked: false }, { name: '电话线', isChecked: false },
+  { name: '营养液', isChecked: false }, { name: '盐水', isChecked: false }];
+  isOther: boolean = false;
+  otherCommodity: string = '';
+  commodityComments: string = '';
   //默认送物品
-  isSendCommodity:boolean = true;
+  isSendCommodity: boolean = true;
   //录音相关
   MAX_RECORD_TIME = 60;
   text_record: string = '录音';
@@ -91,7 +91,7 @@ export class TaskListPage {
     private menuCtrl: MenuController,
     private util: UtilityProvider,
     private api: SoapApiProvider,
-    private platform:Platform
+    private platform: Platform
   ) {
     // this.initDefaultTime();
     this.checkOptionArray = this.navParams.get('data');
@@ -173,11 +173,11 @@ export class TaskListPage {
     // this.getTransferTools();
     // this.getCheckItemByHospitalDeptCode();
     // this.getDrugTypeByHospitalDept();
-    if(this.checkOptionArray&&this.checkOptionArray.length > 0) {
+    if (this.checkOptionArray && this.checkOptionArray.length > 0) {
       console.log('登录成功!');
-    }else {
+    } else {
       this.util.dismissLoading();
-      this.util.showAlertOneBtn('提示','数据初始化异常,请重新登录!','确定',(data)=>{
+      this.util.showAlertOneBtn('提示', '数据初始化异常,请重新登录!', '确定', (data) => {
         this.platform.exitApp();
       });
     }
@@ -257,17 +257,17 @@ export class TaskListPage {
           item.String10 = array[index]['String10'];
           item.Note = array[index]['Note'];
           item.DelayBy = array[index]['DelayBy'];
-          if(item.DelayBy) {
+          if (item.DelayBy) {
             if (item.DelayBy === '催单') {
-              item.isFirstPush = true; 
-            }else {
+              item.isFirstPush = true;
+            } else {
               item.isFirstPush = false;
             }
             item.delayByStr = '已催单';
-          }else {
+          } else {
             item.delayByStr = '';
           }
-          
+
           item.State = array[index]['State'];
           if (item.State === '完工' || item.State === '取消') {
             doneArray.push(item);
@@ -370,9 +370,9 @@ export class TaskListPage {
         isChecked = true;
       }
     }
-    if (isChecked||this.isOther) {
-      if(this.isOther) {
-        if(this.otherCommodity) {
+    if (isChecked || this.isOther) {
+      if (this.isOther) {
+        if (this.otherCommodity) {
           this.util.showLoading('创建任务中,请稍候...');
           setTimeout(() => {
             let data = this.getTransferDataForm(TRANSPORT_COMMODITY);
@@ -390,29 +390,29 @@ export class TaskListPage {
               this.showAlert('创建失败,请稍后重试！');
             });
           }, 500);
-        }else {
+        } else {
           this.showAlert('请输入其他运送物品的信息!');
         }
-      }else {
+      } else {
         this.util.showLoading('创建任务中,请稍候...');
-          setTimeout(() => {
-            let data = this.getTransferDataForm(TRANSPORT_COMMODITY);
-            this.api.createTransferTask(data).then(result => {
-              this.util.dismissLoading();
-              if (result['Flag'] === 'S') {
-                this.showAlert('创建成功');
-                this.resetFormData();
-                this.getTrackListData(); //刷新列表
-              } else {
-                this.showAlert(result['Message']);
-              }
-            }).catch(error => {
-              this.util.dismissLoading();
-              this.showAlert('创建失败,请稍后重试！');
-            });
-          }, 500);
+        setTimeout(() => {
+          let data = this.getTransferDataForm(TRANSPORT_COMMODITY);
+          this.api.createTransferTask(data).then(result => {
+            this.util.dismissLoading();
+            if (result['Flag'] === 'S') {
+              this.showAlert('创建成功');
+              this.resetFormData();
+              this.getTrackListData(); //刷新列表
+            } else {
+              this.showAlert(result['Message']);
+            }
+          }).catch(error => {
+            this.util.dismissLoading();
+            this.showAlert('创建失败,请稍后重试！');
+          });
+        }, 500);
       }
-     
+
     } else {
       this.showAlert('请至少选择一项检查项!');
     }
@@ -464,11 +464,11 @@ export class TaskListPage {
         data['FromSickbed'] = this.bedNum;
         data['patientname'] = this.patientName;
         let checkDateStr = ''
-        if(this.checkDate) {
+        if (this.checkDate) {
           let checkDateStr = this.util.formatAPIDate(new Date(this.checkDate).getTime());
         }
         //如果用户没有选择时间，给一个默认初始时间
-        data['CheckTime'] = checkDateStr? checkDateStr: this.util.formatAPIDate(0);
+        data['CheckTime'] = checkDateStr ? checkDateStr : this.util.formatAPIDate(0);
         let picStr = '';
         for (let index in this.picArray) {
           let item = this.picArray[index];
@@ -503,7 +503,7 @@ export class TaskListPage {
         break;
       case TRANSPORT_COMMODITY:
         //如果用户没有选择时间，给一个默认初始时间
-        data['CheckTime'] = checkDateStr? checkDateStr: this.util.formatAPIDate(0);
+        data['CheckTime'] = checkDateStr ? checkDateStr : this.util.formatAPIDate(0);
         let commodityStr = '';
         for (let index in this.commodityArray) {
           let item = this.commodityArray[index];
@@ -512,12 +512,12 @@ export class TaskListPage {
           }
         }
         commodityStr = commodityStr.substring(0, commodityStr.length - 1);
-        commodityStr = this.isOther&&this.otherCommodity? commodityStr+','+this.otherCommodity:commodityStr;
+        commodityStr = this.isOther && this.otherCommodity ? commodityStr + ',' + this.otherCommodity : commodityStr;
         data['String10'] = commodityStr;
-        if(this.isSendCommodity) {
+        if (this.isSendCommodity) {
           data['ToLocation'] = this.api.userInfo['DeptName'];
           data['FromLocation'] = '';
-        }else{
+        } else {
           data['FromLocation'] = this.api.userInfo['DeptName'];
           data['ToLocation'] = '';
         }
@@ -539,12 +539,12 @@ export class TaskListPage {
   }
 
   onTransferToolsClicked(index) {
-    for(let i in this.transportTools) {
+    for (let i in this.transportTools) {
       let item = this.transportTools[i];
-      if(Number(i) === index) {
+      if (Number(i) === index) {
         item.isChecked = true;
         this.transportOption = item.name;
-      }else {
+      } else {
         item.isChecked = false;
       }
     }
@@ -759,7 +759,7 @@ export class TaskListItemModel {
   DelegateAt: string = '';
   DelayBy: string = '';//催单状态
   delayByStr: string = '';
-  isFirstPush:boolean = true;
+  isFirstPush: boolean = true;
   imgs: string = '';
   String6: string = '';
   CREATEDATE: string = '';
@@ -772,5 +772,20 @@ export class TaskListItemModel {
   String10: string = '';//检查项目
   constructor() {
 
+  }
+
+  getItemIcon(): string {
+    switch (this.TargetType) {
+      case '病人':
+        return 'assets/imgs/icon-br.png';
+      case '标本':
+        return 'assets/imgs/icon-bb.png';
+      case '药品':
+        return 'assets/imgs/icon-yp.png';
+      case '物品':
+        return 'assets/imgs/icon-wz.png';
+      default:
+        return 'assets/imgs/icon-br.png';
+    }
   }
 }

@@ -52,22 +52,23 @@
               <div class="div-item-row-half">
                 <div class="div-title">运送工具:</div>
                 <div *ngFor="let item of transportTools; let i = index" [ngClass]="item.isChecked? 'div-tools-item-checked':'div-tools-item-default'"
-                (click)="onTransferToolsClicked(i)"
-                >
+                  (click)="onTransferToolsClicked(i)">
                   {{item.name}}
                 </div>
               </div>
               <div class="div-item-row-half">
                 <ion-item no-lines class="my-ion-item">
                   <ion-label class="my-lable">预约时间:</ion-label>
-                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate" (ionFocus)="onDateTimeClicked()"></ion-datetime>
+                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"
+                    (ionFocus)="onDateTimeClicked()"></ion-datetime>
                 </ion-item>
               </div>
             </div>
             <div>
-              <div class="div-upload-img-content" *ngIf="false" >
+              <div class="div-upload-img-content" *ngIf="false">
                 <div class="div-title">拍摄病人检查单</div>
-                <img *ngFor="let item of picArray; let i = index" class="div-img-item" src="{{item.thumbImgPath}}" (click)="showPicture(item)"/>
+                <img *ngFor="let item of picArray; let i = index" class="div-img-item" src="{{item.thumbImgPath}}"
+                  (click)="showPicture(item)" />
 
                 <button *ngIf="picArray.length < 5" ion-button outline small class="btn-action-img" (click)="takePhoto()">
                   <ion-icon name="ios-camera-outline"></ion-icon>
@@ -110,7 +111,7 @@
               <div class="div-text">药品运送</div>
               <button ion-button small (click)="onDrugTransferClicked()">提交</button>
             </div>
-            <div class="div-item-row-no-border" *ngIf="false" >
+            <div class="div-item-row-no-border" *ngIf="false">
               <div class="div-item-row-half">
                 <ion-item no-lines class="my-ion-item">
                   <ion-label class="my-lable">预约时间</ion-label>
@@ -120,9 +121,7 @@
               <div class="div-item-row-half">
                 <ion-item no-lines class="my-ion-item">
                   <ion-label class="my-lable">药房</ion-label>
-                  <ion-select okText="确定" cancelText="取消">
-                    <ion-option *ngFor="let item of drugTypies"  value="{{item.PropString7}}">{{item.PropString7}}</ion-option>
-                  </ion-select>
+
                 </ion-item>
               </div>
             </div>
@@ -133,62 +132,68 @@
               <div class="div-text">物品运送</div>
             </div>
             <div class="div-checkbox-container">
-                <div class="div-title">运送物品</div>
-                <ion-chip *ngFor="let item of commodityArray" [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
-                  (click)="onCheckItemClicked(item)">
-                  {{item.name}}
+              <div class="div-title">运送物品</div>
+              <ion-chip *ngFor="let item of commodityArray" [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
+                (click)="onCheckItemClicked(item)">
+                {{item.name}}
+              </ion-chip>
+              <div style="width: 100%; display: flex;align-items: center;">
+                <ion-chip [ngClass]="isOther? 'div-check-item-checked':'div-check-item-default'" (click)="onCommodityOthersChecked()">
+                  其他
                 </ion-chip>
-                <div style="width: 100%; display: flex;align-items: center;">
-                  <ion-chip [ngClass]="isOther? 'div-check-item-checked':'div-check-item-default'"
-                  (click)="onCommodityOthersChecked()">
-                    其他
-                  </ion-chip>
-                  <ion-input [disabled]="!isOther" type="text" class="my-ion-input" placeholder="请输入其他物品" [(ngModel)]="otherCommodity"></ion-input>
-                </div>
+                <ion-input [disabled]="!isOther" type="text" class="my-ion-input" placeholder="请输入其他物品" [(ngModel)]="otherCommodity"></ion-input>
+              </div>
             </div>
-            <div class="div-item-row" *ngIf="false" >
+            <div class="div-item-row" *ngIf="false">
               <div class="div-item-row-half">
                 <ion-item no-lines class="my-ion-item">
                   <ion-label class="my-lable">预约时间</ion-label>
-                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate" (ionFocus)="onDateTimeClicked()"></ion-datetime>
+                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"
+                    (ionFocus)="onDateTimeClicked()"></ion-datetime>
                 </ion-item>
               </div>
-              <div class="div-item-row-half" *ngIf="false" >
+              <div class="div-item-row-half" *ngIf="false">
                 <ion-item no-lines class="my-ion-item">
                   <ion-label class="my-lable">送/取物品</ion-label>
                   <ion-toggle [(checked)]="isSendCommodity"></ion-toggle>
                 </ion-item>
               </div>
-          </div>
-          <div class="div-item-row">
-              
+            </div>
+            <div class="div-item-row">
+
               <div class="div-title">备注:</div>
               <ion-input type="text" [(ngModel)]="commodityComments" placeholder="请输入规格，数量，科室"></ion-input>
-         
-          </div>
-          <div class="div-item-row-no-border">
+
+            </div>
+            <div class="div-item-row-no-border">
               <div class="div-item-row-half">
                 <button ion-button small (click)="onCommodityTransferClicked(false)" style="width:100%">从本病区取</button>
               </div>
               <div class="div-item-row-half">
                 <button ion-button small (click)="onCommodityTransferClicked(true)" style="width:100%">送到本病区</button>
               </div>
-          </div>
+            </div>
           </div>
         </div>
       </div>
-      <div *ngIf="false"  class="div-audio-record">
+      <div *ngIf="false" class="div-audio-record">
         <div class="div-record-action">
-          <button ion-button small class="btn-action-bar-item" (click)="recordActionClicked()"><ion-icon name="{{icon_text_record}}"></ion-icon>&nbsp;{{btn_text_record}}</button>
-          <button ion-button small class="btn-action-bar-item"><ion-icon name="ios-play"></ion-icon>&nbsp;播放</button>
-          <button ion-button small class="btn-action-bar-item"><ion-icon name="ios-cloud-upload"></ion-icon>&nbsp;上传</button>
+          <button ion-button small class="btn-action-bar-item" (click)="recordActionClicked()">
+            <ion-icon name="{{icon_text_record}}"></ion-icon>&nbsp;{{btn_text_record}}
+          </button>
+          <button ion-button small class="btn-action-bar-item">
+            <ion-icon name="ios-play"></ion-icon>&nbsp;播放
+          </button>
+          <button ion-button small class="btn-action-bar-item">
+            <ion-icon name="ios-cloud-upload"></ion-icon>&nbsp;上传
+          </button>
         </div>
-        <div *ngIf="is_Record_start"  class="div-record-process">
-            <div class="div-circle-dot">
-            </div>
-            <div class="div-record-time">
-              {{text_record_time}}
-            </div>
+        <div *ngIf="is_Record_start" class="div-record-process">
+          <div class="div-circle-dot">
+          </div>
+          <div class="div-record-time">
+            {{text_record_time}}
+          </div>
         </div>
       </div>
     </div>
@@ -205,63 +210,70 @@
       </ion-segment>
 
       <ion-scroll #myListScroll scrollY="true" class="my-list-scroll">
-        <div [ngSwitch]="segSelect" >
-            <div *ngSwitchCase="'DOING'" class="div-list-content">
-              <!-- <div *ngFor="let item of doingTaskList" (click)="listItemClicked(item)">
-                <div class="div-task-list-item-top">
-                  <div class="div-task-item-type">
-                      {{item.TargetType}}
-                  </div>
-                  <div class="div-task-item-time">
-                      {{item.PatientBirthday}}
-                  </div>
-                  <div class="div-task-item-btn-left">
-                    催单
-                  </div>
-                  <div class="div-task-item-btn-right">
-                    取消
-                  </div>
+        <div [ngSwitch]="segSelect">
+          <div *ngSwitchCase="'DOING'" class="div-list-content">
+            <div *ngFor="let item of doingTaskList" (click)="listItemClicked(item)" style="margin-top: 10px;">
+              <div class="div-task-list-item-top">
+                <div class="div-task-item-type">
+                  <img class="img-icon" src="{{item.getItemIcon()}}" />
+                  <div>{{item.TargetType}}</div>
                 </div>
-              </div> -->
-                <div class="ion-card-content" *ngFor="let item of doingTaskList" (click)="listItemClicked(item)">
-                  <div>
-                      <div class="div-text">
-                        <span [ngClass]="item.isFirstPush ? 'span-push-first':'span-push-second'">{{item.delayByStr}}</span>&nbsp;<span style="color:#24C68F">{{item.TargetType}}</span>&nbsp;|&nbsp;<b>{{item.FromSickbed}}&nbsp;|&nbsp;{{item.patientname}}</b>&nbsp;|&nbsp;{{item.String10}}
-                        </div>
-                        <div class="div-text">
-                          {{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}&nbsp;{{item.Operator}}
-                        </div>
-                  </div>
-                  <div class="div-action-bar">
-                    <button ion-button small class="btn-action-bar-item" color="primary" (click)="pushTransferBill($event, item)">
-                      <ion-icon name="ios-notifications"></ion-icon>&nbsp;催单
-                    </button>
-                    <button ion-button small class="btn-action-bar-item" color="danger" (click)="cancelTransferBill($event, item)">
-                      <ion-icon name="ios-undo"></ion-icon>&nbsp;取消
-                    </button>
-                  </div>
+                <div class="div-task-item-time">
+                  {{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}
+                  <img *ngIf="item.DelayBy" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'" [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
+                </div>
+
+                <div class="div-task-item-btn-left">
+                  <button ion-button clear small color="primary" (click)="pushTransferBill($event, item)">
+                    <img class="img-icon" src="assets/imgs/icon-cd.png" />
+                    催单
+                  </button>
+
+                </div>
+                <div class="div-task-item-btn-right">
+                  <button ion-button clear small color="danger" (click)="cancelTransferBill($event, item)">
+                    <img class="img-icon" src="assets/imgs/icon-quxiao.png" />
+                    取消
+                  </button>
                 </div>
               </div>
+              <div class="div-task-list-item-bottom">
+                <div class="div-text">
+                  床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;检查项目:{{item.String10}}
+                </div>
+              </div>
+            </div>
+          </div>
 
-              <div *ngSwitchCase="'DONE'" class="div-list-content">
-                  <div class="ion-card-content" *ngFor="let item of doneTaskList" (click)="listItemClicked(item)">
-                    <div>
-                      <div class="div-text">
-                        <span [ngClass]="item.isFirstPush ? 'span-push-first':'span-push-second'">{{item.delayByStr}}</span>&nbsp;<span style="color:#24C68F">{{item.TargetType}}</span>&nbsp;|&nbsp;<b>{{item.FromSickbed}}&nbsp;|&nbsp;{{item.patientname}}</b>&nbsp;|&nbsp;{{item.String10}}
-                      </div>
-                      <div class="div-text">
-                        {{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}&nbsp;{{item.Operator}}
-                      </div>
+          <div *ngSwitchCase="'DONE'" class="div-list-content">
+              <div *ngFor="let item of doneTaskList" (click)="listItemClicked(item)" style="margin-top: 10px;">
+                  <div class="div-task-list-item-top">
+                    <div class="div-task-item-type">
+                      <img class="img-icon" src="{{item.getItemIcon()}}" />
+                      <div>{{item.TargetType}}</div>
+                    </div>
+                    <div class="div-task-item-time">
+                      {{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}
+                      <img *ngIf="item.DelayBy" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'" [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
+                    </div>
+    
+                  </div>
+                  <div class="div-task-list-item-bottom">
+                    <div class="div-text">
+                      床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;检查项目:{{item.String10}}
                     </div>
                   </div>
                 </div>
+          </div>
         </div>
       </ion-scroll>
     </div>
   </div>
 
   <ion-fab bottom right>
-      <button ion-fab mini (click)="refreshList()"><ion-icon name="ios-refresh" ></ion-icon></button>
-    </ion-fab>
+    <button ion-fab mini (click)="refreshList()">
+      <ion-icon name="md-sync"></ion-icon>
+    </button>
+  </ion-fab>
 
 </ion-content>
