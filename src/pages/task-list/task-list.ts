@@ -465,7 +465,7 @@ export class TaskListPage {
         data['patientname'] = this.patientName;
         let checkDateStr = ''
         if (this.checkDate) {
-          let checkDateStr = this.util.formatAPIDate(new Date(this.checkDate).getTime());
+          checkDateStr = this.util.formatAPIDate(new Date(this.checkDate).getTime());
         }
         //如果用户没有选择时间，给一个默认初始时间
         data['CheckTime'] = checkDateStr ? checkDateStr : this.util.formatAPIDate(0);
@@ -502,8 +502,8 @@ export class TaskListPage {
         data['TargetType'] = "药品";
         break;
       case TRANSPORT_COMMODITY:
-        //如果用户没有选择时间，给一个默认初始时间
-        data['CheckTime'] = checkDateStr ? checkDateStr : this.util.formatAPIDate(0);
+        //给一个默认初始时间
+        data['CheckTime'] = this.util.formatAPIDate(0);
         let commodityStr = '';
         for (let index in this.commodityArray) {
           let item = this.commodityArray[index];
