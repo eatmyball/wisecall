@@ -199,15 +199,18 @@
     </div>
 
     <div class="col-list">
-
-      <ion-segment [(ngModel)]="segSelect">
-        <ion-segment-button value="DOING">
-          进行中
-        </ion-segment-button>
-        <ion-segment-button value="DONE">
-          已完成
-        </ion-segment-button>
-      </ion-segment>
+      <div style="width:100%;display: flex;align-items: center;">
+        <div class="div-segmentbar-list">
+          <div [ngClass]="segSelect ==='DOING'? 'div-seg-checked':'div-seg-default'" (click)="onListSegClicked(true)">
+            进行中
+          </div>
+        </div>
+        <div class="div-segmentbar-list">
+          <div [ngClass]="segSelect ==='DONE'? 'div-seg-checked':'div-seg-default'" (click)="onListSegClicked(false)">
+            已完成
+          </div>
+        </div>
+      </div>
 
       <ion-scroll #myListScroll scrollY="true" class="my-list-scroll">
         <div [ngSwitch]="segSelect">
@@ -218,9 +221,10 @@
                   <img class="img-icon" src="{{item.getItemIcon()}}" />
                   <div>{{item.TargetType}}</div>
                 </div>
-                <div class="div-task-item-time">
-                  {{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}
+                <div class="div-task-item-middle">
                   <img *ngIf="item.DelayBy" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'" [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
+                  <!-- <img class="img-icon-cui2" src="assets/imgs/icon-cui-2.png" /> -->
+                  <div class="div-time-text">{{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}&nbsp;&nbsp;{{item.Operator}}</div>
                 </div>
 
                 <div class="div-task-item-btn-left">
@@ -246,24 +250,23 @@
           </div>
 
           <div *ngSwitchCase="'DONE'" class="div-list-content">
-              <div *ngFor="let item of doneTaskList" (click)="listItemClicked(item)" style="margin-top: 10px;">
-                  <div class="div-task-list-item-top">
-                    <div class="div-task-item-type">
-                      <img class="img-icon" src="{{item.getItemIcon()}}" />
-                      <div>{{item.TargetType}}</div>
-                    </div>
-                    <div class="div-task-item-time">
-                      {{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}
-                      <img *ngIf="item.DelayBy" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'" [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
-                    </div>
-    
-                  </div>
-                  <div class="div-task-list-item-bottom">
-                    <div class="div-text">
-                      床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;检查项目:{{item.String10}}
-                    </div>
-                  </div>
+            <div *ngFor="let item of doneTaskList" (click)="listItemClicked(item)" style="margin-top: 10px;">
+              <div class="div-task-list-item-top">
+                <div class="div-task-item-type">
+                  <img class="img-icon" src="{{item.getItemIcon()}}" />
+                  <div>{{item.TargetType}}</div>
                 </div>
+                <div class="div-task-item-middle">
+                  <img *ngIf="item.DelayBy" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'" [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
+                  <div class="div-time-text">{{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}&nbsp;&nbsp;{{item.Operator}}</div>
+                </div>
+              </div>
+              <div class="div-task-list-item-bottom">
+                <div class="div-text">
+                  床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;检查项目:{{item.String10}}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </ion-scroll>

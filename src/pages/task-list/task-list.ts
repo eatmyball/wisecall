@@ -529,6 +529,14 @@ export class TaskListPage {
     return data;
   }
 
+  onListSegClicked(isDoing){
+    if(isDoing) {
+      this.segSelect = SEG_DOING; 
+    }else {
+      this.segSelect = SEG_DONE;
+    }
+  }
+
   onCheckItemClicked(item) {
     item.isChecked = !item.isChecked;
   }

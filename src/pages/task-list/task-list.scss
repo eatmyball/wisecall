@@ -271,14 +271,6 @@ page-task-list {
     color: #fff;
   }
 
-  .span-push-first {
-    color: #1F8CF1;
-  }
-
-  .span-push-second {
-    color: #FF4747;
-  }
-
   .div-tools-item-default {
     font-size: 1.0rem;
     padding: 5px 8px;
@@ -297,6 +289,35 @@ page-task-list {
     border-radius: 3px;
   }
 
+  .div-segmentbar-list{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .div-seg-default{
+      width: 140px;
+      height: 35px;
+      text-align: center;
+      font-size: 1.5rem;
+      line-height: 35px;
+      font-weight: 400;
+      color: #8c96be;
+      background-color: transparent;
+      border-radius: 17x;
+    }
+    .div-seg-checked{
+      width: 140px;
+      height: 35px;
+      text-align: center;
+      line-height: 35px;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #fff;
+      background-color: #1F8CF1;
+      border-radius: 17px;
+    }
+  }
+
   .div-task-list-item-top {
     height: 40px;
     display: flex;
@@ -304,16 +325,14 @@ page-task-list {
     padding: 0px 5px;
     border-bottom: 1px solid rgb(242, 242, 242);
     background-color: #fff;
+
     .img-icon{
+      flex: 0;
       width: 20px;
       height: 20px;
       margin: 0px 5px;
     }
-    .img-icon-cui2{
-      width: 36px;
-      height: 20px;
-      margin: 0px 5px;
-    }
+
     .div-task-item-type {
       display: flex;
       align-items: center;
@@ -325,18 +344,29 @@ page-task-list {
       color: #1F8CF1;
       font-size: 1.2rem;
     }
-
-    .div-task-item-time {
+    .div-task-item-middle{
       display: flex;
       align-items: center;
       width: 50%;
       height: 28px;
-      justify-content: center;
-      color: #1F8CF1;
-      font-size: 1.2rem;
       border-right: 1px solid rgb(242, 242, 242);
+      padding: 0px 5px;
+      .img-icon-cui2{
+        flex: 0;
+        width: 36px;
+        height: 20px;
+        margin: 0px 5px;
+      }
+      .div-time-text {
+        flex: 1;
+        color: #1F8CF1;
+        font-size: 1.2rem;
+        max-lines: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
-
     .div-task-item-btn-left {
       display: flex;
       align-items: center;
