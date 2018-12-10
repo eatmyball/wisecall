@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
+import { FileOpener } from '@ionic-native/file-opener';
 @Component({
   templateUrl: 'app.html'
 })
@@ -31,7 +32,8 @@ export class MyApp {
     private events:Events,
     private api:SoapApiProvider,
     private local:LocalDbProvider,
-    private autoStart:Autostart
+    private autoStart:Autostart,
+    private fileOpen:FileOpener
     ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -69,7 +71,8 @@ export class MyApp {
       return;
     }
     else if(page['name'] === '更新') {
-      window.open('http://info.liontown.cn/htmprd/apk/wisecall.apk');
+      this.showUpdateApkAlert();
+      // window.open('http://info.liontown.cn/htmprd/apk/wisecall.apk');
       return;
     }
     else {
@@ -87,6 +90,27 @@ export class MyApp {
       this.deptName = this.api.userInfo['DeptName'];
       this.userName = this.api.userInfo['Name'];
     })
+  }
+
+  listener = (progress)=>{
+    let process =  new Number((progress.loaded / progress.total) * 100);
+    console.log('下载进度:'+ process + '%');
+  }
+
+  showUpdateApkAlert() {
+    let filePath = '/storage/emulated/0/Download/wisecall.apk';
+    this.util.showAlertWithOkhandler('版本更新','是否下载最新的客户端','取消','确认',(data)=>{
+      this.util.showLoading('正在下载中，请稍候...');
+      this.util.setDownloadListener(this.listener);
+      this.util.fileDownload('http://info.liontown.cn/htmprd/apk/wisecall.apk',filePath).then((fileEntry)=>{
+        this.util.dismissLoading();
+        console.log('下载成功:'+ JSON.stringify(fileEntry));
+        this.fileOpen.open(fileEntry.toURL(),'application/vnd.android.package-archive');
+      }).catch(error=>{
+        this.util.dismissLoading();
+        console.log('下载失败:'+ JSON.stringify(error, Object.getOwnPropertyNames(error)));
+      });
+    });
   }
 
 }

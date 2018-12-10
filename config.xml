@@ -93,4 +93,6 @@
     <plugin name="cordova-plugin-nativestorage" spec="~2.3.2" />
     <engine name="android" spec="~6.4.0" />
     <plugin name="cordova-plugin-autostart" spec="~2.3.0" />
+    <plugin name="cordova-plugin-file-transfer" spec="~1.7.1" />
+    <plugin name="cordova-plugin-file-opener2" spec="~2.0.19" />
 </widget>

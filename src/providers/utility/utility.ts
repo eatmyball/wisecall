@@ -1,3 +1,4 @@
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { Injectable } from '@angular/core';
 import { ToastController, LoadingController, Loading, AlertController } from 'ionic-angular';
 
@@ -15,21 +16,25 @@ export class UtilityProvider {
 
   myLoading: Loading;
   isLoadingShow: boolean = false;
+  transferObj:FileTransferObject = null;
 
   constructor(private toastCtrl: ToastController, 
     private loadingCtrl: LoadingController,
     private alert:AlertController,
-    private camera:Camera
+    private camera:Camera,
+    private fileTransfer:FileTransfer
     ) {
     console.log('Hello UtilityProvider Provider');
+    this.transferObj = this.fileTransfer.create();
   }
-
 
   private createLoading() {
     if (this.myLoading == null) {
       this.myLoading = this.loadingCtrl.create({
         spinner: 'crescent',
-        enableBackdropDismiss: true
+        enableBackdropDismiss: false,
+        dismissOnPageChange:false,
+        showBackdrop:false
       });
     }
   }
@@ -271,6 +276,31 @@ export class UtilityProvider {
       .replace(/ss/ig, time.TSecond)
       .replace(/s/ig, String(time.Second))
       .replace(/fff/ig, String(time.Millisecond))
+  }
+
+
+  /**
+   * 下载请求
+   * @param url 
+   * @param fileName 
+   */
+  fileDownload(url:string,fileName:string):Promise<any> {
+    return this.transferObj.download(url,fileName);
+  }
+
+  /**
+   * 设置下载监听
+   * @param listener 
+   */
+  setDownloadListener(listener:(event:ProgressEvent)=>any) {
+    this.transferObj.onProgress(listener);
+  }
+
+  /**
+   * 停止上传或者下载操作
+   */
+  abortFileTransferAction() {
+    this.transferObj.abort();
   }
 
 }

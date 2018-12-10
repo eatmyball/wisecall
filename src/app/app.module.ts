@@ -15,6 +15,8 @@ import { HttpModule } from '@angular/http';
 import { SoapApiProvider } from '../providers/soap-api/soap-api';
 import { LocalDbProvider } from '../providers/local-db/local-db';
 import { Autostart } from '@ionic-native/autostart';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { FileOpener } from '@ionic-native/file-opener';
 
 
 @NgModule({
@@ -55,7 +57,10 @@ import { Autostart } from '@ionic-native/autostart';
     BackkeyProvider,
     SoapApiProvider,
     LocalDbProvider,
-    Autostart
+    Autostart,
+    FileTransfer,
+    FileOpener
+    
   ]
 })
 export class AppModule {}
