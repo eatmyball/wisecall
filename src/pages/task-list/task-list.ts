@@ -54,6 +54,9 @@ export class TaskListPage {
   //备注
   comments: string = '';
 
+  //标本运送
+  isEmergency:boolean = true;
+
   //送药运送表单内容
   // drugTypies = [];
 
@@ -255,6 +258,7 @@ export class TaskListPage {
           item.EmergencyLevel = array[index]['EmergencyLevel'];
           item.BillNo = array[index]['BillNo'];
           item.String10 = array[index]['String10'];
+          item.String12 = array[index]['String12'];
           item.Note = array[index]['Note'];
           item.DelayBy = array[index]['DelayBy'];
           if (item.DelayBy) {
@@ -319,9 +323,11 @@ export class TaskListPage {
   }
 
   //标本运送
-  onSpecimenTransport() {
+  onSpecimenTransport(flag:boolean) {
+    this.isEmergency = flag;
+    let msg = this.isEmergency? '急诊':'平诊';
     //标本运送
-    this.util.showAlertWithOkhandler('提示', '是否创建标本运送任务', '否', '是', (data) => {
+    this.util.showAlertWithOkhandler('提示', '是否创建'+msg+'标本运送任务', '否', '是', (data) => {
       this.util.showLoading('创建任务中,请稍候...');
       let params = this.getTransferDataForm(TRANSPORT_SPECIMEN);
       this.api.createTransferTask(params).then(result => {
@@ -494,6 +500,7 @@ export class TaskListPage {
         data['String10'] = checkOptions;
         break;
       case TRANSPORT_SPECIMEN:
+        data['String12'] = this.isEmergency?'急诊标本运送':'平诊标本运送';
         data['FromLocation'] = this.api.userInfo['DeptName'];
         data['TargetType'] = "标本";
         break;
@@ -777,7 +784,8 @@ export class TaskListItemModel {
   EmergencyLevel: string = '';
   AssignAt: string = '';
   Note: string = '';
-  String10: string = '';//检查项目
+  String10: string = ''; //检查项目
+  String12: string = ''; //急诊/平诊标本运送
   constructor() {
 
   }

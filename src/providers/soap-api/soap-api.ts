@@ -12,11 +12,12 @@ import { ApiProvider } from '../api/api';
 @Injectable()
 export class SoapApiProvider {
 
-  version:string = '0.0.5(2018120204)';
+  version:string = '0.0.7(2018121301)';
 
   HOSPITALCODE:string = '03013';
 
-  BASE_URL = 'http://123.206.111.21/htmwstest/';
+  // BASE_URL = 'http://123.206.111.21/htmwstest/';
+  BASE_URL = 'http://info.liontown.cn/htmwsforpadprd/';
 
   //缩略图路径
   THUMB_URL = this.BASE_URL+'uploadimage/';

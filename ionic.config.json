@@ -6,8 +6,8 @@
   "type": "ionic-angular",
   "proxies":[
     {
-      "path": "/htmwstest",
-      "proxyUrl": "http://123.206.111.21/htmwstest"
+      "path": "/htmwsforpadprd",
+      "proxyUrl": "http://info.liontown.cn/htmwsforpadprd"
     }
   ]
 }

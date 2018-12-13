@@ -93,13 +93,13 @@
           <div class="div-block-bottom-border" style="margin-top:20px">
             <div class="div-upload-img-content">
               <div class="div-title">呼叫标本服务</div>
-              <div class="div-action-blue" *ngIf="true" (click)="onSpecimenTransport()">
+              <div class="div-action-red" *ngIf="true" (click)="onSpecimenTransport(true)">
                 <ion-icon name="ios-notifications" color="text-white"></ion-icon>
-                <div class="div-action-btn-text">呼叫</div>
+                <div class="div-action-btn-text">急诊</div>
               </div>
-              <div class="div-action-red" *ngIf="false" (click)="onSpecimenPushTask()">
-                <ion-icon name="ios-notifications" color="text-white"></ion-icon>
-                <div class="div-action-btn-text">催单</div>
+              <div class="div-action-blue" *ngIf="true" (click)="onSpecimenTransport(false)">
+                <ion-icon name="md-alarm" color="text-white"></ion-icon>
+                <div class="div-action-btn-text">平诊</div>
               </div>
             </div>
           </div>
@@ -242,8 +242,11 @@
                 </div>
               </div>
               <div class="div-task-list-item-bottom">
-                <div class="div-text">
+                <div *ngIf="item.TargetType !=='标本'"  class="div-text">
                   床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;检查项目:{{item.String10}}
+                </div>
+                <div *ngIf="item.TargetType ==='标本'" class="div-text">
+                  床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;{{item.String12}}
                 </div>
               </div>
             </div>
@@ -262,8 +265,11 @@
                 </div>
               </div>
               <div class="div-task-list-item-bottom">
-                <div class="div-text">
+                <div *ngIf="item.TargetType !=='标本'"  class="div-text">
                   床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;检查项目:{{item.String10}}
+                </div>
+                <div *ngIf="item.TargetType ==='标本'" class="div-text">
+                  床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;{{item.String12}}
                 </div>
               </div>
             </div>
