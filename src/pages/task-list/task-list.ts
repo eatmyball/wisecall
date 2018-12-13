@@ -55,7 +55,7 @@ export class TaskListPage {
   comments: string = '';
 
   //标本运送
-  isEmergency:boolean = true;
+  isEmergency: boolean = true;
 
   //送药运送表单内容
   // drugTypies = [];
@@ -291,43 +291,46 @@ export class TaskListPage {
 
   //病人运送任务
   onPatientTransferTaskCreate() {
-    let isChecked = false;
-    for (let index in this.checkOptionArray) {
-      let item = this.checkOptionArray[index];
-      if (item['isChecked']) {
-        isChecked = true;
+
+    this.util.showAlertWithOkhandler('提示', '是否创建病人运送任务', '否', '是', (data) => {
+      let isChecked = false;
+      for (let index in this.checkOptionArray) {
+        let item = this.checkOptionArray[index];
+        if (item['isChecked']) {
+          isChecked = true;
+        }
       }
-    }
-    if (isChecked) {
-      this.util.showLoading('创建任务中,请稍候...');
-      setTimeout(() => {
-        let data = this.getTransferDataForm(TRANSPORT_PATIENT);
-        this.api.createTransferTask(data).then(result => {
-          this.util.dismissLoading();
-          if (result['Flag'] === 'S') {
-            this.showAlert('创建成功');
-            this.resetFormData();
-            this.getTrackListData(); //刷新列表
-          } else {
-            this.showAlert(result['Message']);
-          }
-        }).catch(error => {
-          this.util.dismissLoading();
-          this.showAlert('创建失败,请稍后重试！');
-        });
-      }, 500);
-    } else {
-      this.showAlert('请至少选择一项检查项!');
-    }
+      if (isChecked) {
+        this.util.showLoading('创建任务中,请稍候...');
+        setTimeout(() => {
+          let data = this.getTransferDataForm(TRANSPORT_PATIENT);
+          this.api.createTransferTask(data).then(result => {
+            this.util.dismissLoading();
+            if (result['Flag'] === 'S') {
+              this.showAlert('创建成功');
+              this.resetFormData();
+              this.getTrackListData(); //刷新列表
+            } else {
+              this.showAlert(result['Message']);
+            }
+          }).catch(error => {
+            this.util.dismissLoading();
+            this.showAlert('创建失败,请稍后重试！');
+          });
+        }, 500);
+      } else {
+        this.showAlert('请至少选择一项检查项!');
+      }
+    });
 
   }
 
   //标本运送
-  onSpecimenTransport(flag:boolean) {
+  onSpecimenTransport(flag: boolean) {
     this.isEmergency = flag;
-    let msg = this.isEmergency? '急诊':'平诊';
+    let msg = this.isEmergency ? '急诊' : '平诊';
     //标本运送
-    this.util.showAlertWithOkhandler('提示', '是否创建'+msg+'标本运送任务', '否', '是', (data) => {
+    this.util.showAlertWithOkhandler('提示', '是否创建' + msg + '标本运送任务', '否', '是', (data) => {
       this.util.showLoading('创建任务中,请稍候...');
       let params = this.getTransferDataForm(TRANSPORT_SPECIMEN);
       this.api.createTransferTask(params).then(result => {
@@ -500,7 +503,7 @@ export class TaskListPage {
         data['String10'] = checkOptions;
         break;
       case TRANSPORT_SPECIMEN:
-        data['String12'] = this.isEmergency?'急诊标本运送':'平诊标本运送';
+        data['String12'] = this.isEmergency ? '急诊标本运送' : '平诊标本运送';
         data['FromLocation'] = this.api.userInfo['DeptName'];
         data['TargetType'] = "标本";
         break;
@@ -536,10 +539,10 @@ export class TaskListPage {
     return data;
   }
 
-  onListSegClicked(isDoing){
-    if(isDoing) {
-      this.segSelect = SEG_DOING; 
-    }else {
+  onListSegClicked(isDoing) {
+    if (isDoing) {
+      this.segSelect = SEG_DOING;
+    } else {
       this.segSelect = SEG_DONE;
     }
   }
