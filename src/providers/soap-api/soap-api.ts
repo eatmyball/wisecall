@@ -12,7 +12,7 @@ import { ApiProvider } from '../api/api';
 @Injectable()
 export class SoapApiProvider {
 
-  version:string = '0.0.7(2018121301)';
+  version:string = '0.0.7(2018121401)';
 
   HOSPITALCODE:string = '03013';
 
@@ -49,6 +49,7 @@ export class SoapApiProvider {
     params['HospitalCode'] = this.HOSPITALCODE;
     params['DeptCode'] = this.userInfo['DeptCode'];
     params['OperatorCode'] = '';
+    params['BillType'] = '即时';
     let now = new Date();
     now.setHours(0);
     now.setMinutes(0);

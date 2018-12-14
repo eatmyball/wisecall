@@ -1,6 +1,6 @@
 import { UtilityProvider, TOAST_POSITION } from './../../providers/utility/utility';
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, Scroll, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, Scroll, Platform, DateTime } from 'ionic-angular';
 import { SoapApiProvider } from '../../providers/soap-api/soap-api';
 import * as Base64 from 'base64-js';
 
@@ -32,6 +32,7 @@ const SEG_DONE = 'DONE';
 export class TaskListPage {
 
   @ViewChild('myListScroll') myListScroll: Scroll;
+  @ViewChild('timepicker') timepicker: DateTime
 
   segSelect: string = SEG_DOING;
   taskType: string = 'LEFT';
@@ -49,6 +50,7 @@ export class TaskListPage {
   transportOption: string = '轮椅';
   //预约时间
   checkDate: string = '';
+  dateTimeForShow: string = '';
   //选择的照片
   picArray = [];
   //备注
@@ -644,6 +646,15 @@ export class TaskListPage {
 
   onDateTimeClicked() {
     this.initDefaultTime();
+    setTimeout(() => {
+      if(this.timepicker) {
+        this.timepicker.open();
+      }
+    }, 100);
+  }
+
+  onDateTimeChanged() {
+    this.dateTimeForShow = this.util.formatDateYYYYMMDDHHMM(new Date(this.checkDate).getTime());
   }
 
   //催单
