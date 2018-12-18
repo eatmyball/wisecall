@@ -79,6 +79,7 @@
               </div>
             </div>
             <div>
+              <!--暂未使用图片上传模块-->
               <div class="div-upload-img-content" *ngIf="false">
                 <div class="div-title">拍摄病人检查单</div>
                 <img *ngFor="let item of picArray; let i = index" class="div-img-item" src="{{item.thumbImgPath}}"
@@ -190,6 +191,7 @@
           </div>
         </div>
       </div>
+      <!--暂未使用录音模块-->
       <div *ngIf="false" class="div-audio-record">
         <div class="div-record-action">
           <button ion-button small class="btn-action-bar-item" (click)="recordActionClicked()">
