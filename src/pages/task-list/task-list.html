@@ -105,8 +105,8 @@
             </div>
           </div>
           <!--类型为标本运送-->
-          <div class="div-block-bottom-border" style="margin-top:20px">
-            <div class="div-upload-img-content">
+          <div class="div-block-bottom-border">
+            <div class="div-item-row">
               <div class="div-title">呼叫标本服务</div>
               <div class="div-action-red" *ngIf="true" (click)="onSpecimenTransport(true)">
                 <ion-icon name="ios-notifications" color="text-white"></ion-icon>
@@ -117,7 +117,19 @@
                 <div class="div-action-btn-text">平诊</div>
               </div>
             </div>
+            <div style="display:flex;align-items:center">
+                <div class="div-qrcode">
+                  <img class="img-qrcode" src="assets/imgs/qrcode.png" />
+                </div>
+                <div class="div-transfer-lines">
+                  <div >线路1:当前站点[<span style="color: steelblue">病区1</span>]&nbsp;&nbsp;14:30->下一站点[<span style="color: steelblue">病区2</span>]</div>
+                  <div style="margin-top:5px;">线路2:当前站点[<span style="color: steelblue">病区3</span>]&nbsp;&nbsp;16:25->下一站点[<span style="color: steelblue">病区4</span>]</div>
+                  <div style="margin-top:5px;">线路3:当前站点[<span style="color: steelblue">病区5</span>]&nbsp;&nbsp;16:32->下一站点[<span style="color: steelblue">病区6</span>]</div>
+                  <div style="margin-top:5px;">线路4:当前站点[<span style="color: steelblue">病区7</span>]&nbsp;&nbsp;16:53->下一站点[<span style="color: steelblue">病区8</span>]</div>
+                </div>
+            </div>
           </div>
+
         </div>
         <div *ngSwitchCase="'RIGHT'">
           <!--类型为药品运送-->
@@ -142,7 +154,7 @@
             </div>
           </div>
           <!--类型为物品运送-->
-          <div class="div-block-bottom-border" style="margin-top:20px">
+          <div class="div-block-bottom-border">
             <div class="div-item-row" style="justify-content: space-between">
               <div class="div-text">物品运送</div>
             </div>
@@ -191,6 +203,7 @@
           </div>
         </div>
       </div>
+
       <!--暂未使用录音模块-->
       <div *ngIf="false" class="div-audio-record">
         <div class="div-record-action">

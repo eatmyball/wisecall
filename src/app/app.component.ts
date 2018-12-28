@@ -9,6 +9,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { FileOpener } from '@ionic-native/file-opener';
+import { cordovaWarn } from '@ionic-native/core';
 @Component({
   templateUrl: 'app.html'
 })
@@ -46,6 +47,8 @@ export class MyApp {
       this.menuCtrl.enable(false);
       this.initEvents();
       this.version = this.api.version;
+      //测试插件
+      // this.testPlugIn();
     });
 
     this.initMenuList();
@@ -95,6 +98,14 @@ export class MyApp {
   listener = (progress)=>{
     let process =  new Number((progress.loaded / progress.total) * 100);
     console.log('下载进度:'+ process + '%');
+  }
+
+  testPlugIn() {
+    (<any>window).Fastble.coolMethod('plugman test', (success)=>{
+      console.log('测试插件输出:'+success);
+    }, (error)=>{
+      console.log('测试插件报错:'+error);
+    });
   }
 
   showUpdateApkAlert() {
