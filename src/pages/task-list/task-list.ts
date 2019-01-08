@@ -32,7 +32,8 @@ const SEG_DONE = 'DONE';
 export class TaskListPage {
 
   @ViewChild('myListScroll') myListScroll: Scroll;
-  @ViewChild('timepicker') timepicker: DateTime
+  @ViewChild('timepicker') timepicker: DateTime;
+  @ViewChild('birthday') timepicker2: DateTime;
 
   segSelect: string = SEG_DOING;
   taskType: string = 'LEFT';
@@ -42,6 +43,11 @@ export class TaskListPage {
   bedNum: string = ''
   //病人姓名
   patientName: string = '';
+  //病人腕带号
+  patientWristband: string = '';
+  //病人生日
+  patientBirthday: string =  '';
+  birthForshow: string = '';
   //检查项目
   checkOptionArray = [];
   //运送工具
@@ -295,6 +301,11 @@ export class TaskListPage {
   onPatientTransferTaskCreate() {
 
     this.util.showAlertWithOkhandler('提示', '是否创建病人运送任务', '否', '是', (data) => {
+      //床号不能为空
+      if(!this.bedNum) {
+        this.showAlert('请填写病人床号!');
+        return;
+      }
       let isChecked = false;
       for (let index in this.checkOptionArray) {
         let item = this.checkOptionArray[index];
@@ -474,6 +485,7 @@ export class TaskListPage {
         data['TransferTools'] = this.transportOption;
         data['FromSickbed'] = this.bedNum;
         data['patientname'] = this.patientName;
+        data['PatientNo'] = this.patientWristband;
         let checkDateStr = ''
         if (this.checkDate) {
           checkDateStr = this.util.formatAPIDate(new Date(this.checkDate).getTime());
@@ -501,7 +513,8 @@ export class TaskListPage {
         toLocation = toLocation.substring(0, toLocation.length - 1);
         checkOptions = checkOptions.substring(0, checkOptions.length - 1);
         data['ToLocation'] = toLocation;
-        data['Note'] = this.comments;
+        // 用户生日放在备注最后
+        data['Note'] = this.comments +' 病人生日:'+this.birthForshow;
         data['String10'] = checkOptions;
         break;
       case TRANSPORT_SPECIMEN:
@@ -615,6 +628,11 @@ export class TaskListPage {
     this.bedNum = ''
     //病人姓名
     this.patientName = '';
+    //病人腕带
+    this.patientWristband = '';
+    //生日
+    this.patientBirthday = '';
+    this.birthForshow = '';
     //检查项目
     this.checkOptionArray.forEach((item, index) => {
       item['isChecked'] = false;
@@ -653,8 +671,20 @@ export class TaskListPage {
     }, 100);
   }
 
+  onBirthDateClicked() {
+    setTimeout(() => {
+      if(this.timepicker2) {
+        this.timepicker2.open();
+      }
+    }, 100);
+  }
+
   onDateTimeChanged() {
     this.dateTimeForShow = this.util.formatDateYYYYMMDDHHMM(new Date(this.checkDate).getTime());
+  }
+
+  onBirthdayChanged() {
+    this.birthForshow = this.util.dateFormat(new Date(this.patientBirthday), 'yyyy-MM-dd');
   }
 
   //催单

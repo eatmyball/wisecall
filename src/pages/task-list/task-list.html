@@ -40,6 +40,31 @@
                 <ion-input type="text" class="my-ion-input" placeholder="请输入病人姓名" [(ngModel)]="patientName"></ion-input>
               </div>
             </div>
+            <div class="div-item-row">
+              <div class="div-item-row-half">
+                <div class="div-title">腕带号:</div>
+                <ion-input type="text" class="my-ion-input" placeholder="请输入病人腕带号" [(ngModel)]="patientWristband"></ion-input>
+              </div>
+              <div class="div-item-row-half">
+                <div class="div-title">出生日期:</div>
+                <ion-input type="text" class="my-ion-input"
+                   readonly="true"
+                   placeholder="请选择日期" 
+                   (ionFocus)="onBirthDateClicked()"
+                   [(ngModel)]="birthForshow"></ion-input>
+                <ion-datetime 
+                  #birthday
+                  style="display:none"
+                  displayFormat="YYYY-MM-DD" 
+                  pickerFormat="YYYY-MM-DD" 
+                  [(ngModel)]="patientBirthday"
+                  (ngModelChange)="onBirthdayChanged()"
+                  type="datetime-local"
+                  cancelText="取消"
+                  doneText="确认"
+                  ></ion-datetime>
+              </div>
+            </div>
             <div class="div-checkbox-container">
               <div class="div-title">检查项目:</div>
               <ion-chip *ngFor="let item of checkOptionArray" [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
@@ -57,8 +82,7 @@
                 </div>
               </div>
               <div class="div-item-row-half">
-                <ion-item no-lines class="my-ion-item">
-                  <ion-label class="my-lable">预约时间:</ion-label>
+                  <div class="div-title">预约时间:</div>
                   <ion-input type="text" class="my-ion-input"
                    readonly="true"
                    placeholder="请选择时间" 
@@ -75,7 +99,6 @@
                   cancelText="取消"
                   doneText="确认"
                   ></ion-datetime>
-                </ion-item>
               </div>
             </div>
             <div>
@@ -105,7 +128,7 @@
             </div>
           </div>
           <!--类型为标本运送-->
-          <div class="div-block-bottom-border" style="margin-top:20px">
+          <div class="div-block-bottom-border">
             <div class="div-upload-img-content">
               <div class="div-title">呼叫标本服务</div>
               <div class="div-action-red" *ngIf="true" (click)="onSpecimenTransport(true)">
@@ -142,7 +165,7 @@
             </div>
           </div>
           <!--类型为物品运送-->
-          <div class="div-block-bottom-border" style="margin-top:20px">
+          <div class="div-block-bottom-border">
             <div class="div-item-row" style="justify-content: space-between">
               <div class="div-text">物品运送</div>
             </div>
