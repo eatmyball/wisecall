@@ -198,10 +198,14 @@
               </div>
             </div>
             <div class="div-item-row">
-
-              <div class="div-title">备注:</div>
-              <ion-input type="text" [(ngModel)]="commodityComments" placeholder="请输入规格，数量，科室"></ion-input>
-
+              <div style="width: 25%; display: flex;align-items: center;">
+                <div class="div-title">数量:</div>
+                <ion-input type="number" [(ngModel)]="commodityNum" placeholder="请输入数量"></ion-input>
+              </div>
+              <div  style="width: 75%; display: flex;align-items: center;">
+                <div class="div-title">备注:</div>
+                <ion-input type="text" [(ngModel)]="commodityComments" placeholder="请输入规格，科室"></ion-input>
+              </div>
             </div>
             <div class="div-item-row-no-border">
               <div class="div-item-row-half">

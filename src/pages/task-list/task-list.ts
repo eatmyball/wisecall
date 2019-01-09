@@ -78,6 +78,8 @@ export class TaskListPage {
   isOther: boolean = false;
   otherCommodity: string = '';
   commodityComments: string = '';
+  //物品运输数量
+  commodityNum: string = '';
   //默认送物品
   isSendCommodity: boolean = true;
   //录音相关
@@ -546,7 +548,7 @@ export class TaskListPage {
           data['FromLocation'] = this.api.userInfo['DeptName'];
           data['ToLocation'] = '';
         }
-        data['Note'] = this.commodityComments;
+        data['Note'] = '数量:'+this.commodityNum + ' 备注:'+this.commodityComments;
         data['TargetType'] = "物品";
         break;
     }
@@ -647,6 +649,7 @@ export class TaskListPage {
     });
     //物品运送备注
     this.commodityComments = '';
+    this.commodityNum = '';
   }
 
   removeAll() {
