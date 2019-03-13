@@ -47,11 +47,15 @@ export class HomePage {
 
     setTimeout(() => {
       this.api.userLogin({'Account':this.username, 'Password':this.password}).then(data=>{
+        this.util.dismissLoading();
         //登录成功
         if(data['Flag'] === 'S') {
           //保存用户名密码
           this.local.save('account', this.username);
           this.local.save('password', this.password);
+          if(this.username.length >=5) {
+            this.api.setHosipitalCode(this.username.substring(0, 5));
+          }
           this.api.setUserInfo(data['dsData']['Table1'][0]);
           //获取检查项数据列表
           this.getCheckItemByHospitalDeptCode();

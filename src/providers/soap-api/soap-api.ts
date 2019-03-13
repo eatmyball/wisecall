@@ -12,7 +12,7 @@ import { ApiProvider } from '../api/api';
 @Injectable()
 export class SoapApiProvider {
 
-  version:string = '0.1.0(2019010801)';
+  version:string = '0.1.1(2019031301)';
 
   HOSPITALCODE:string = '03013';
 
@@ -76,6 +76,17 @@ export class SoapApiProvider {
    */
   public setUserInfo(data) {
     this.userInfo = data;
+  }
+
+  /**
+   * 根据登录用户设置医院code
+   * @param code 
+   */
+  public setHosipitalCode(code:string) {
+    if(code) {
+      this.HOSPITALCODE = code;
+    }
+    
   }
 
   /**

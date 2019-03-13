@@ -69,12 +69,15 @@ export class TaskListPage {
   // drugTypies = [];
 
   //物品运送
-  commodityArray = [{ name: '氧气', isChecked: false }, { name: '甲苯', isChecked: false },
-  { name: '甲醛', isChecked: false }, { name: '微波炉', isChecked: false }, { name: '监护仪', isChecked: false },
-  { name: '平车', isChecked: false }, { name: '轮椅', isChecked: false }, { name: 'PDA', isChecked: false },
-  { name: '试管', isChecked: false }, { name: '红光治疗仪', isChecked: false }, { name: '微泵', isChecked: false },
-  { name: '气泵', isChecked: false }, { name: '气垫床', isChecked: false }, { name: '电话线', isChecked: false },
-  { name: '营养液', isChecked: false }, { name: '盐水', isChecked: false }];
+  commodityArray = [{ name: '甲苯', isChecked: false }, { name: '盐酸', isChecked: false },
+  { name: '4L氧气', isChecked: false }, { name: '10L氧气', isChecked: false }, { name: '40L氧气', isChecked: false },
+  { name: 'PDA', isChecked: false }, { name: '动态包', isChecked: false }, { name: '绿盖短管', isChecked: false },
+  { name: '咽试子管', isChecked: false }, { name: '紫盖长管', isChecked: false }, { name: '监护仪', isChecked: false },
+  { name: '微波炉', isChecked: false }, { name: '红光治疗仪', isChecked: false }, { name: '微泵', isChecked: false },
+  { name: '气泵', isChecked: false }, { name: '流量表', isChecked: false }, { name: '耳温仪', isChecked: false }
+  , { name: '血培养', isChecked: false }, { name: '血箱', isChecked: false }, { name: '眼科培养', isChecked: false }
+  , { name: '气垫床', isChecked: false }, { name: '平车', isChecked: false }, { name: '轮椅', isChecked: false }
+  , { name: '甲醛', isChecked: false }, { name: '盐水送介入', isChecked: false }, { name: '造影剂（提供姓名生日）', isChecked: false }];
   isOther: boolean = false;
   otherCommodity: string = '';
   commodityComments: string = '';
