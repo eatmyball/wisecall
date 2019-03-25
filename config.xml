@@ -5,7 +5,7 @@
     <author email="denghliu@126.com" href="http://ionicframework.com/">Hank-Teng</author>
     <content src="index.html" />
     <access origin="*" />
-    <access origin="http://info.liontown.cn/htmwsforpadprd" />
+    <access origin="http://happyship.wisebox.com.cn/htmwsforpadprd" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -14,7 +14,7 @@
     <allow-intent href="geo:*" />
     <preference name="Orientation" value="landscape" />
     <preference name="ScrollEnabled" value="false" />
-    <preference name="android-minSdkVersion" value="24" />
+    <preference name="android-minSdkVersion" value="23" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="BackupWebStorage" value="none" />

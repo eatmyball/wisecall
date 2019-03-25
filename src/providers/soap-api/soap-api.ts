@@ -17,7 +17,8 @@ export class SoapApiProvider {
   HOSPITALCODE:string = '03013';
 
   // BASE_URL = 'http://123.206.111.21/htmwstest/';
-  BASE_URL = 'http://info.liontown.cn/htmwsforpadprd/';
+  // BASE_URL = 'http://info.liontown.cn/htmwsforpadprd/';
+  BASE_URL = 'http://happyship.wisebox.com.cn/htmwsforpadprd/'; 
 
   //缩略图路径
   THUMB_URL = this.BASE_URL+'uploadimage/';
