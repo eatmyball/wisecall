@@ -39,7 +39,7 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
-      this.statusBar.backgroundColorByHexString('#0070E0');
+      this.statusBar.backgroundColorByHexString('#FE770B');
       this.splashScreen.hide();
       //允许自启动
       this.autoStart.enable();
