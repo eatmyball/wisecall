@@ -12,11 +12,11 @@ import { ApiProvider } from '../api/api';
 @Injectable()
 export class SoapApiProvider {
 
-  version:string = '0.1.1(2019031301)';
+  version:string = '1.0.0(2019041701)';
 
   HOSPITALCODE:string = '03013';
 
-  // BASE_URL = 'http://123.206.111.21/htmwstest/';
+  // BASE_URL = 'http://115.159.188.190/htmwstest/';
   BASE_URL = 'http://info.liontown.cn/htmwsforpadprd/';
 
   //缩略图路径
@@ -136,6 +136,11 @@ export class SoapApiProvider {
   public PushTransferTaskByID(transferTaskBillNo:string):Promise<Object> {
     let param =  { TransferTaskBillNo: transferTaskBillNo};
     return this.doSoapByActionName('PressATransferTask',JSON.stringify(param));
+  }
+
+  public getTransferPath() {
+    let param = {HospitalCode:this.HOSPITALCODE , DeptCode:this.userInfo['DeptCode']};
+    return this.doSoapByActionName('GetPathByHospitalDeptCode', JSON.stringify(param));
   }
 
   private uploadFileByName(base64, name:string) {

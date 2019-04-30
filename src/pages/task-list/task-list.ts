@@ -101,6 +101,14 @@ export class TaskListPage {
   doingTaskList = [];
   doneTaskList = [];
 
+  //运送人员位置信息
+  lastDept:string = '暂无';
+  lastDeptTime:string = '暂无';
+  currentDept:string = '暂无'
+  currentDeptTime:string = '暂无'
+  nextDept:string = '暂无'
+
+
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -120,6 +128,8 @@ export class TaskListPage {
     this.initBaseDatas();
     //获取列表数据
     this.getTrackListDataShowLoading();
+    //获取运送站点信息
+    this.getTransferPath();
   }
 
   ionViewDidLeave() {
@@ -154,6 +164,8 @@ export class TaskListPage {
       //自动刷新列表
       if (!this.isScroll) {
         this.getTrackListData();
+        //获取运送站点信息
+        this.getTransferPath();
       }
     }, AUTOREFRESH_TIME_INTERVAL);
 
@@ -738,6 +750,29 @@ export class TaskListPage {
         }, 500);
       }
     );
+  }
+
+  getTransferPath() {
+    this.api.getTransferPath().then(data=>{
+      if(data) {
+        if(data['Flag'] == 'S') {
+          let result = data['dsData']['Table'][0];
+          if(result) {
+            this.lastDept = result['DeptPrv'];
+            this.currentDept =result['DeptCurrent'];
+            this.nextDept = result['DeptNext'];
+            return;
+          }
+        }
+      }
+    }).catch(error=>{
+
+    });
+    this.lastDept = '暂无';
+    this.lastDeptTime = '暂无';
+    this.currentDept = '暂无'
+    this.currentDeptTime = '暂无'
+    this.nextDept = '暂无'
   }
 
   //刷新页面
