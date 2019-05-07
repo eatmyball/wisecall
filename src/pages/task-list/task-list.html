@@ -141,13 +141,18 @@
               </div>
             </div>
             <div class="div-transfer">
-              <div class="div-line-blue"></div>
-              <div class="div-line-grey"></div>
               
+              
+              <div class="div-line-container">
+                <div class="div-circle-bule"></div>
+                <div class="div-line-blue"></div>
+                <div class="div-circle-ring"></div>
+                <div class="div-line-grey"></div>
+                <div class="div-circle-grey"></div>
+              </div>
               <div class="div-transfer-info">
                 <div class="div-transfer-info-item">
                     <div class="div-text-info-center-blue">上一站</div>
-                  <div class="div-circle-bule"></div>
                   <div class="div-text-info-center-blue">{{lastDept}}</div>
                   <div *ngIf="false" class="div-text-info-center-blue">{{lastDeptTime}}</div>
                 </div>
@@ -155,13 +160,11 @@
                     <div style="display:flex;">
                       <ion-icon name="md-walk" color="primary"></ion-icon>
                     </div>  
-                    <div class="div-circle-ring"></div>
                     <div class="div-text-info-center-blue">{{currentDept}}</div>
                     <div *ngIf="false" class="div-text-info-center-blue">{{currentDeptTime}}</div>
                 </div>
                 <div class="div-transfer-info-item">
                     <div class="div-text-info-center-grey">下一站</div>
-                    <div class="div-circle-grey"></div>
                     <div class="div-text-info-center-grey">{{nextDept}}</div>
                     <div *ngIf="false" class="div-text-info-center-grey">&nbsp;&nbsp;</div>
                 </div>

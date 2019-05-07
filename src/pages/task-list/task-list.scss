@@ -145,22 +145,44 @@ page-task-list {
       }
 
       .div-transfer{
-        position: relative;
-        .div-line-blue{
-          position:absolute; 
-          height: 4px; 
-          width: 167px; 
-          background-color: #1F8CF1;
-          left: 52px; 
-          top:23px;
+        .div-line-container{
+          display:flex;
+          width:100%;
+          height:30px;
+          align-items: center;
+          padding: 0px 40px;
+          .div-line-blue{
+            height: 4px; 
+            flex: 1;
+            background-color: #1F8CF1;
+            margin-bottom: 2px;
+ 
+          }
+          .div-line-grey{
+            height: 4px; 
+            flex: 1;
+            background-color: #969696;
+
+          }
         }
-        .div-line-grey{
-          position:absolute; 
-          height: 4px; 
-          width: 168px; 
+        .div-circle-bule{
+          width: 15px; 
+          height: 15px; 
+          border-radius: 50%; 
+          background-color: #1F8CF1;
+        }
+        .div-circle-ring{
+          width: 16px; 
+          height: 16px; 
+          border-radius: 50%; 
+          border:2px solid #1F8CF1;
+        }
+        .div-circle-grey{
+          width: 15px; 
+          height: 15px;
+          border-radius: 50%; 
           background-color: #969696;
-          left: 237px; 
-          top:23px;
+          margin-top: 2px;
         }
         .div-transfer-info{
           width: 100%; 
@@ -173,25 +195,6 @@ page-task-list {
           flex-direction:column; 
           justify-content: center; 
           align-items: center;
-          .div-circle-bule{
-            width: 15px; 
-            height: 15px; 
-            border-radius: 50%; 
-            background-color: #1F8CF1;
-          }
-          .div-circle-ring{
-            width: 16px; 
-            height: 16px; 
-            border-radius: 50%; 
-            border:2px solid #1F8CF1;
-          }
-          .div-circle-grey{
-            width: 15px; 
-            height: 15px;
-            border-radius: 50%; 
-            background-color: #969696;
-            margin-bottom: 2px;
-          }
           .div-text-info-center-blue{
             width:100%;
             text-align: center;
