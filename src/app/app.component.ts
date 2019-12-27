@@ -87,8 +87,8 @@ export class MyApp {
 
   initEvents() {
     this.events.subscribe('USER_LOGIN_SUCCESS',()=>{
-      this.deptName = this.api.userInfo['DeptName'];
-      this.userName = this.api.userInfo['Name'];
+      this.deptName = this.api.userInfo.departmentName;
+      this.userName = this.api.userInfo.realname;
     })
   }
 

@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.wisebox.nursestation.happyship" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>福舟云联</name>
-    <description>福舟护士站</description>
+<widget id="com.wisebox.nursestation.happyship" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>呈贡云大护士站</name>
+    <description>呈贡云大护士站</description>
     <author email="denghliu@126.com" href="http://ionicframework.com/">Hank-Teng</author>
     <content src="index.html" />
     <access origin="*" />
-    <access origin="http://happyship.wisebox.com.cn/htmwsforpadprd" />
+    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

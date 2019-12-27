@@ -46,21 +46,22 @@ export class HomePage {
     this.util.showLoading('正在登录中,请稍候...');
 
     setTimeout(() => {
-      this.api.userLogin({'Account':this.username, 'Password':this.password}).then(data=>{
+      this.api.userLogin(this.username,this.password).then(data=>{
         this.util.dismissLoading();
         //登录成功
-        if(data['Flag'] === 'S') {
+        if(data) {
           //保存用户名密码
           this.local.save('account', this.username);
           this.local.save('password', this.password);
           if(this.username.length >=5) {
             this.api.setHosipitalCode(this.username.substring(0, 5));
           }
-          this.api.setUserInfo(data['dsData']['Table1'][0]);
+          this.api.setUserInfo(data);
+          this.api.userInfo.userName = this.username;
           //获取检查项数据列表
           this.getCheckItemByHospitalDeptCode();
         }else {
-          this.showAlert(data['Message']);
+          this.showAlert('登录失败，请稍后重试!');
         }
       }).catch(error=>{
         this.util.dismissLoading();
@@ -73,10 +74,9 @@ export class HomePage {
     getCheckItemByHospitalDeptCode() {
       this.api.GetCheckItemByHospitalDeptCodeForIpad().then(data => {
         this.util.dismissLoading();
-        if (data['Flag'] === 'S') {
-          let datas = data['dsData']['Table'];
-          for (let index in datas) {
-            let item = datas[index];
+        if (data) {
+          for (let index in data) {
+            let item = data[index];
             item['isChecked'] = false;
             this.checkOptionArray.push(item);
           }
@@ -87,8 +87,6 @@ export class HomePage {
           }else {
             this.showAlert('登录失败，请稍后重试!');
           }
-        }else{
-          this.showAlert('登录失败，请稍后重试!');
         }
       }).catch(error => {
         this.util.dismissLoading();

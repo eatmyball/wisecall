@@ -6,8 +6,8 @@
   "type": "ionic-angular",
   "proxies":[
     {
-      "path": "/htmwsforpadprd",
-      "proxyUrl": "http://info.liontown.cn/htmwsforpadprd"
+      "path": "/kmfs",
+      "proxyUrl": "http://106.14.61.156/kmfs"
     }
   ]
 }

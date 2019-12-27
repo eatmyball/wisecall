@@ -43,78 +43,54 @@
             <div class="div-item-row">
               <div class="div-item-row-half">
                 <div class="div-title">腕带号:</div>
-                <ion-input type="text" class="my-ion-input" placeholder="请输入病人腕带号" [(ngModel)]="patientWristband"></ion-input>
+                <ion-input type="text" class="my-ion-input" placeholder="请输入病人腕带号" [(ngModel)]="patientWristband">
+                </ion-input>
               </div>
               <div class="div-item-row-half">
+                <div class="div-title">年龄:</div>
+                <ion-input type="num" class="my-ion-input" placeholder="请输入病人腕带号" [(ngModel)]="age"></ion-input>
+              </div>
+              <div class="div-item-row-half" *ngIf="false">
                 <div class="div-title">出生日期:</div>
-                <ion-input type="text" class="my-ion-input"
-                   readonly="true"
-                   placeholder="请选择日期" 
-                   (ionFocus)="onBirthDateClicked()"
-                   [(ngModel)]="birthForshow"></ion-input>
-                <ion-datetime 
-                  #birthday
-                  style="display:none"
-                  displayFormat="YYYY-MM-DD" 
-                  pickerFormat="YYYY-MM-DD" 
-                  [(ngModel)]="patientBirthday"
-                  (ngModelChange)="onBirthdayChanged()"
-                  type="datetime-local"
-                  cancelText="取消"
-                  doneText="确认"
-                  ></ion-datetime>
+                <ion-input type="text" class="my-ion-input" readonly="true" placeholder="请选择日期"
+                  (ionFocus)="onBirthDateClicked()" [(ngModel)]="birthForshow"></ion-input>
+                <ion-datetime #birthday style="display:none" displayFormat="YYYY-MM-DD" pickerFormat="YYYY-MM-DD"
+                  [(ngModel)]="birthDay" (ngModelChange)="onBirthdayChanged()" type="datetime-local" cancelText="取消"
+                  doneText="确认"></ion-datetime>
               </div>
             </div>
             <div class="div-checkbox-container">
               <div class="div-title">检查项目:</div>
-              <ion-chip *ngFor="let item of checkOptionArray" [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
-                (click)="onCheckItemClicked(item)">
-                {{item.PROPSTRING7}}
-              </ion-chip>
+              <div *ngFor="let item of checkOptionArray; let i = index">
+                <ion-chip *ngIf="item.departmentName"
+                  [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
+                  (click)="onCheckItemClicked(i)">
+                  {{item.inspectionItemName}}
+                </ion-chip>
+              </div>
             </div>
 
             <div class="div-item-row">
-              <div class="div-item-row-half">
                 <div class="div-title">运送工具:</div>
-                <div *ngFor="let item of transportTools; let i = index" [ngClass]="item.isChecked? 'div-tools-item-checked':'div-tools-item-default'"
+                <div *ngFor="let item of transportTools; let i = index"
+                  [ngClass]="item.isChecked? 'div-tools-item-checked':'div-tools-item-default'"
                   (click)="onTransferToolsClicked(i)">
-                  {{item.name}}
+                  {{item.dictName}}
                 </div>
-              </div>
-              <div class="div-item-row-half">
-                  <div class="div-title">预约时间:</div>
-                  <ion-input type="text" class="my-ion-input"
-                   readonly="true"
-                   placeholder="请选择时间" 
-                   (ionFocus)="onDateTimeClicked()"
-                   [(ngModel)]="dateTimeForShow"></ion-input>
-                  <ion-datetime 
-                  #timepicker
-                  style="display:none"
-                  displayFormat="YYYY-MM-DD HH:mm" 
-                  pickerFormat="YYYY-MM-DD HH:mm" 
-                  [(ngModel)]="checkDate"
-                  (ngModelChange)="onDateTimeChanged()"
-                  type="datetime-local"
-                  cancelText="取消"
-                  doneText="确认"
-                  ></ion-datetime>
-              </div>
             </div>
-            <div>
-              <!--暂未使用图片上传模块-->
-              <div class="div-upload-img-content" *ngIf="false">
-                <div class="div-title">拍摄病人检查单</div>
-                <img *ngFor="let item of picArray; let i = index" class="div-img-item" src="{{item.thumbImgPath}}"
-                  (click)="showPicture(item)" />
 
-                <button *ngIf="picArray.length < 5" ion-button outline small class="btn-action-img" (click)="takePhoto()">
-                  <ion-icon name="ios-camera-outline"></ion-icon>
-                </button>
-                <button *ngIf="picArray.length > 0" ion-button outline small class="btn-action-img" (click)="removeAll()">
-                  <ion-icon name="ios-trash"></ion-icon>
-                </button>
-              </div>
+            <div class="div-item-row">
+                <div class="div-title">预约时间:</div>
+                <ion-input type="text" class="my-ion-input" readonly="true" placeholder="请选择时间"
+                  (ionFocus)="onDateTimeClicked()" [(ngModel)]="dateTimeForShow"></ion-input>
+                <ion-datetime #timepicker style="display:none" displayFormat="YYYY-MM-DD HH:mm"
+                  pickerFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate" (ngModelChange)="onDateTimeChanged()"
+                  type="datetime-local" cancelText="取消" doneText="确认"></ion-datetime>
+
+            </div>
+
+            
+            <div>
             </div>
 
             <div class="div-comments">
@@ -130,14 +106,31 @@
           <!--类型为标本运送-->
           <div class="div-block-bottom-border">
             <div class="div-upload-img-content">
-              <div class="div-title">呼叫标本服务</div>
-              <div class="div-action-red" *ngIf="true" (click)="onSpecimenTransport(true)">
-                <ion-icon name="ios-notifications" color="text-white"></ion-icon>
-                <div class="div-action-btn-text">急诊</div>
+              <div style="display: flex; width:100%; align-items:flex-start; justify-content: space-between;">
+                <div class="div-checkbox-container" style="border-bottom: 0px; flex:1;">
+                  <div class="div-title">标本运送:</div>
+
+                  <ion-chip *ngFor="let item of specimenTypes; let i = index"
+                    [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
+                    (click)="onSpecimenTypesClicked(i)">
+                    {{item.sampleName}}
+                  </ion-chip>
+                </div>
+                <div class="div-comments-btn">
+                  <button ion-button small (click)="onSpecimenTransport()">提交</button>
+                </div>
               </div>
-              <div class="div-action-blue" *ngIf="true" (click)="onSpecimenTransport(false)">
-                <ion-icon name="md-alarm" color="text-white"></ion-icon>
-                <div class="div-action-btn-text">平诊</div>
+            </div>
+            <div *ngIf="true" class="div-upload-img-content">
+              <div style="display: flex; width:100%; align-items:flex-start; justify-content: space-between;">
+                <div class="div-to-location">
+                  <div class="div-title">目的科室:</div>
+                  <div *ngFor="let item of specimenToDeparts; let i = index"
+                    [ngClass]="item.isChecked? 'div-tools-item-checked':'div-tools-item-default'"
+                    (click)="onMultiToDepartmentSelected(i)">
+                    {{item.departmentName}}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -145,22 +138,29 @@
         <div *ngSwitchCase="'RIGHT'">
           <!--类型为药品运送-->
           <div class="div-block-bottom-border">
-            <div class="div-item-row-no-border" style="justify-content: space-between">
-              <div class="div-text">药品运送</div>
-              <button ion-button small (click)="onDrugTransferClicked()">提交</button>
-            </div>
-            <div class="div-item-row-no-border" *ngIf="false">
-              <div class="div-item-row-half">
-                <ion-item no-lines class="my-ion-item">
-                  <ion-label class="my-lable">预约时间</ion-label>
-                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"></ion-datetime>
-                </ion-item>
+            <div class="div-upload-img-content">
+              <div style="display: flex; width:100%; align-items:flex-start; justify-content: space-between;">
+                <div class="div-checkbox-container" style="border-bottom: 0px; flex:1;">
+                  <div class="div-title">药品运送:</div>
+                  <ion-chip *ngFor="let item of drugTypies; let i = index"
+                    [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
+                    (click)="onDrugTypesClicked(i)">
+                    {{item.medicineName}}
+                  </ion-chip>
+                </div>
+                <div class="div-comments-btn">
+                  <button ion-button small (click)="onDrugTransferClicked()">提交</button>
+                </div>
               </div>
-              <div class="div-item-row-half">
-                <ion-item no-lines class="my-ion-item">
-                  <ion-label class="my-lable">药房</ion-label>
-
-                </ion-item>
+            </div>
+            <div *ngIf="true" class="div-upload-img-content">
+              <div style="display: flex; width:100%; align-items:flex-start; justify-content: space-between;">
+                <div class="div-to-location">
+                  <div class="div-title">目的科室:</div>
+                  <div class="div-tools-item-checked">
+                    {{loginDepartName}}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -169,73 +169,42 @@
             <div class="div-item-row" style="justify-content: space-between">
               <div class="div-text">物品运送</div>
             </div>
-            <div class="div-checkbox-container">
-              <div class="div-title">运送物品</div>
-              <ion-chip *ngFor="let item of commodityArray" [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
-                (click)="onCheckItemClicked(item)">
-                {{item.name}}
-              </ion-chip>
-              <div style="width: 100%; display: flex;align-items: center;">
-                <ion-chip [ngClass]="isOther? 'div-check-item-checked':'div-check-item-default'" (click)="onCommodityOthersChecked()">
-                  其他
-                </ion-chip>
-                <ion-input [disabled]="!isOther" type="text" class="my-ion-input" placeholder="请输入其他物品" [(ngModel)]="otherCommodity"></ion-input>
-              </div>
-            </div>
-            <div class="div-item-row" *ngIf="false">
-              <div class="div-item-row-half">
-                <ion-item no-lines class="my-ion-item">
-                  <ion-label class="my-lable">预约时间</ion-label>
-                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"
-                    (ionFocus)="onDateTimeClicked()"></ion-datetime>
-                </ion-item>
-              </div>
-              <div class="div-item-row-half" *ngIf="false">
-                <ion-item no-lines class="my-ion-item">
-                  <ion-label class="my-lable">送/取物品</ion-label>
-                  <ion-toggle [(checked)]="isSendCommodity"></ion-toggle>
-                </ion-item>
-              </div>
-            </div>
             <div class="div-item-row">
-              <div style="width: 25%; display: flex;align-items: center;">
+              <div class="div-item-row-half">
+                <div class="div-title">物品:</div>
+                <ion-input type="text" class="my-ion-input" placeholder="请输入物品名称" [(ngModel)]="otherCommodity">
+                </ion-input>
+              </div>
+              <div class="div-item-row-half">
                 <div class="div-title">数量:</div>
                 <ion-input type="number" [(ngModel)]="commodityNum" placeholder="请输入数量"></ion-input>
               </div>
-              <div  style="width: 75%; display: flex;align-items: center;">
+            </div>
+            <div *ngIf="true" class="div-upload-img-content">
+              <div style="display: flex; width:100%; align-items:flex-start; justify-content: space-between;">
+                <div class="div-to-location">
+                  <div class="div-title">目的科室:</div>
+                  <div *ngFor="let item of departmentList; let i = index"
+                    [ngClass]="item.isChecked? 'div-tools-item-checked':'div-tools-item-default'"
+                    (click)="onToDepartmentSelected(i)">
+                    {{item.departmentName}}
+                  </div>
+                </div>
+                <div class="div-comments-btn">
+                  <button ion-button small (click)="onToLocationSelected()">全部</button>
+                </div>
+              </div>
+            </div>
+            <div class="div-comments">
+              <div class="div-comments-row">
                 <div class="div-title">备注:</div>
                 <ion-input type="text" [(ngModel)]="commodityComments" placeholder="请输入备注"></ion-input>
               </div>
-            </div>
-            <div class="div-item-row-no-border">
-              <div class="div-item-row-half">
-                <button ion-button small (click)="onCommodityTransferClicked(false)" style="width:100%">从本病区取</button>
-              </div>
-              <div class="div-item-row-half">
-                <button ion-button small (click)="onCommodityTransferClicked(true)" style="width:100%">送到本病区</button>
+              <div class="div-comments-btn">
+                <button ion-button small (click)="onCommodityTransferClicked()">提交</button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <!--暂未使用录音模块-->
-      <div *ngIf="false" class="div-audio-record">
-        <div class="div-record-action">
-          <button ion-button small class="btn-action-bar-item" (click)="recordActionClicked()">
-            <ion-icon name="{{icon_text_record}}"></ion-icon>&nbsp;{{btn_text_record}}
-          </button>
-          <button ion-button small class="btn-action-bar-item">
-            <ion-icon name="ios-play"></ion-icon>&nbsp;播放
-          </button>
-          <button ion-button small class="btn-action-bar-item">
-            <ion-icon name="ios-cloud-upload"></ion-icon>&nbsp;上传
-          </button>
-        </div>
-        <div *ngIf="is_Record_start" class="div-record-process">
-          <div class="div-circle-dot">
-          </div>
-          <div class="div-record-time">
-            {{text_record_time}}
+
           </div>
         </div>
       </div>
@@ -262,12 +231,14 @@
               <div class="div-task-list-item-top">
                 <div class="div-task-item-type">
                   <img class="img-icon" src="{{item.getItemIcon()}}" />
-                  <div>{{item.TargetType}}</div>
+                  <div>{{item.transferType}}</div>
                 </div>
                 <div class="div-task-item-middle">
-                  <img *ngIf="item.DelayBy" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'" [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
+                  <img *ngIf="item.urgeTime" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'"
+                    [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
                   <!-- <img class="img-icon-cui2" src="assets/imgs/icon-cui-2.png" /> -->
-                  <div class="div-time-text">{{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}&nbsp;&nbsp;{{item.Operator}}</div>
+                  <div class="div-time-text">
+                    {{item.appointmentTime}}&nbsp;&nbsp;{{item.status}}&nbsp;&nbsp;{{item.operatorName}}</div>
                 </div>
 
                 <div class="div-task-item-btn-left">
@@ -285,11 +256,17 @@
                 </div>
               </div>
               <div class="div-task-list-item-bottom">
-                <div *ngIf="item.TargetType !=='标本'"  class="div-text">
-                  床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;检查项目:{{item.String10}}
+                <div *ngIf="item.transferType =='病人'" class="div-text">
+                  床号:{{item.sickbed}}&nbsp;&nbsp;姓名:{{item.patientName}}&nbsp;&nbsp;检查项目:{{item.inspectionItem}}
                 </div>
-                <div *ngIf="item.TargetType ==='标本'" class="div-text">
-                  床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;{{item.String12}}
+                <div *ngIf="item.transferType ==='标本'" class="div-text">
+                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;标本类型:{{item.transferItem}}
+                </div>
+                <div *ngIf="item.transferType ==='药品'" class="div-text">
+                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;药品类型:{{item.transferItem}}
+                </div>
+                <div *ngIf="item.transferType ==='物品'" class="div-text">
+                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;物品:{{item.transferItem}}&nbsp;&nbsp;数量:{{item.quality}}
                 </div>
               </div>
             </div>
@@ -300,19 +277,27 @@
               <div class="div-task-list-item-top">
                 <div class="div-task-item-type">
                   <img class="img-icon" src="{{item.getItemIcon()}}" />
-                  <div>{{item.TargetType}}</div>
+                  <div>{{item.transferType}}</div>
                 </div>
                 <div class="div-task-item-middle">
-                  <img *ngIf="item.DelayBy" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'" [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
-                  <div class="div-time-text">{{item.PatientBirthday}}&nbsp;&nbsp;{{item.State}}&nbsp;&nbsp;{{item.Operator}}</div>
+                  <img *ngIf="item.urgeTime" [ngClass]="item.isFirstPush? 'img-icon':'img-icon-cui2'"
+                    [src]="item.isFirstPush? 'assets/imgs/icon-cui.png':'assets/imgs/icon-cui-2.png'" />
+                  <div class="div-time-text">
+                    {{item.appointmentTime}}&nbsp;&nbsp;{{item.status}}&nbsp;&nbsp;{{item.operatorName}}</div>
                 </div>
               </div>
               <div class="div-task-list-item-bottom">
-                <div *ngIf="item.TargetType !=='标本'"  class="div-text">
-                  床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;检查项目:{{item.String10}}
+                <div *ngIf="item.transferType =='病人'" class="div-text">
+                  床号:{{item.sickbed}}&nbsp;&nbsp;姓名:{{item.patientName}}&nbsp;&nbsp;检查项目:{{item.inspectionItem}}
                 </div>
-                <div *ngIf="item.TargetType ==='标本'" class="div-text">
-                  床号:{{item.FromSickbed}}&nbsp;&nbsp;姓名:{{item.patientname}}&nbsp;&nbsp;{{item.String12}}
+                <div *ngIf="item.transferType ==='标本'" class="div-text">
+                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;标本类型:{{item.transferItem}}
+                </div>
+                <div *ngIf="item.transferType ==='药品'" class="div-text">
+                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;药品类型:{{item.transferItem}}
+                </div>
+                <div *ngIf="item.transferType ==='物品'" class="div-text">
+                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;物品:{{item.transferItem}}&nbsp;&nbsp;数量:{{item.quality}}
                 </div>
               </div>
             </div>
@@ -327,5 +312,4 @@
       <ion-icon name="md-sync"></ion-icon>
     </button>
   </ion-fab>
-
 </ion-content>

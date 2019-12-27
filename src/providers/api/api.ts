@@ -19,7 +19,7 @@ export class ApiProvider {
 
   public Post(url: string, data: any) {
     let header = new Headers({
-      "Content-Type": "text/xml; charset=utf-8",
+      "Content-Type": "application/x-www-form-urlencoded",
     });
 
     let urlAddress = url;
@@ -33,7 +33,7 @@ export class ApiProvider {
   }
   public Get(url: string, data) {
     let header = new Headers({
-      "Content-Type": "text/xml; charset=utf-8",
+      "Content-Type": "application/x-www-form-urlencoded",
     });
 
     return this.httpRequest(
@@ -48,7 +48,7 @@ export class ApiProvider {
   }
   public DELETE(url: string, data) {
     let header = new Headers({
-      "Content-Type": "text/xml; charset=utf-8",
+      "Content-Type": "application/x-www-form-urlencoded",
     });
     return this.httpRequest(
       {
@@ -62,7 +62,7 @@ export class ApiProvider {
   }
   public PUT(url, data) {
     let header = new Headers({
-      "Content-Type": "text/xml; charset=utf-8",
+      "Content-Type": "application/x-www-form-urlencoded",
     });
 
     return this.httpRequest(
