@@ -13,7 +13,7 @@ import { ApiProvider } from '../api/api';
 @Injectable()
 export class SoapApiProvider {
 
-  version:string = '1.0.1(2019122701)';
+  version:string = '1.0.2(2019123001)';
 
   HOSPITALCODE:string = '03013';
 

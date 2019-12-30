@@ -60,7 +60,7 @@ export class TaskListPage {
   checkOptionArray = [];
   //运送工具
   transportTools = [];
-  transportOption: string = '轮椅';
+  transportOption: string;
   specimenTypes = [];
   specimenTypeStr = '';
   //预约时间
@@ -229,6 +229,11 @@ export class TaskListPage {
           transportItem['dictCode'] = data[index]['dictCode'];
           transportItem['dictName'] = data[index]['dictName'];
           transportItem['isChecked'] = false;
+          if(index == '0') {
+
+          }else {
+
+          }
           this.transportTools.push(transportItem);
 
         }
@@ -360,14 +365,7 @@ export class TaskListPage {
         this.showAlert('请填写病人床号!');
         return;
       }
-      let isChecked = false;
-      for (let index in this.checkOptionArray) {
-        let item = this.checkOptionArray[index];
-        if (item['isChecked']) {
-          isChecked = true;
-        }
-      }
-      if (isChecked) {
+      if(this.transportOption) {
         this.util.showLoading('创建任务中,请稍候...');
         setTimeout(() => {
           let data = this.getTransferDataForm(TRANSPORT_PATIENT);
@@ -381,9 +379,12 @@ export class TaskListPage {
             this.showAlert('创建失败,请稍后重试！');
           });
         }, 500);
-      } else {
-        this.showAlert('请至少选择一项检查项!');
+      }else {
+        this.showAlert('请选择运送工具');
+        return;
       }
+        
+      
     });
 
   }
@@ -420,20 +421,34 @@ export class TaskListPage {
 
   //药品运送
   onDrugTransferClicked() {
-    this.util.showAlertWithOkhandler('提示', '是否创建药品运送任务', '否', '是', (data) => {
-      let params = this.getTransferDataForm(TRANSPORT_DRUG);
-      this.util.showLoading('创建任务中,请稍候...');
-      this.api.createTransferTask(params).then(result => {
-        this.util.dismissLoading();
 
-        this.showAlert('创建成功');
-        this.getTrackListData(); //刷新列表
-        this.resetFormData();
-      }).catch(error => {
-        this.util.dismissLoading();
-        this.showAlert('创建失败,请稍后重试！');
-      })
-    });
+    let isSelected = false;
+    for (let index in this.drugTypies) {
+      let item = this.drugTypies[index];
+      if (item['isChecked']) {
+        isSelected = true;
+      }
+    }
+    if(isSelected) {
+      this.util.showAlertWithOkhandler('提示', '是否创建药品运送任务', '否', '是', (data) => {
+        let params = this.getTransferDataForm(TRANSPORT_DRUG);
+        this.util.showLoading('创建任务中,请稍候...');
+        this.api.createTransferTask(params).then(result => {
+          this.util.dismissLoading();
+  
+          this.showAlert('创建成功');
+          this.getTrackListData(); //刷新列表
+          this.resetFormData();
+        }).catch(error => {
+          this.util.dismissLoading();
+          this.showAlert('创建失败,请稍后重试！');
+        })
+      });
+    }else {
+      this.showAlert('请至少选择一种药品类型!');
+    }
+
+    
   }
 
   //物品运送
@@ -528,31 +543,31 @@ export class TaskListPage {
         //如果用户没有选择时间，给一个默认初始时间
 
         body.set("checkTime", checkDateStr ? checkDateStr : this.util.formatAPIDate(0));
-        let toLocation = '';
-        let checkOptions = '';
-        for (let index in this.checkOptionArray) {
-          let item = this.checkOptionArray[index];
-          if (item['isChecked']) {
-            toLocation += item['departmentName'] + ',';
-            checkOptions += item['inspectionItemName'] + ','
-          }
+        // let toLocation = '';
+        // let checkOptions = '';
+        // for (let index in this.checkOptionArray) {
+        //   let item = this.checkOptionArray[index];
+        //   if (item['isChecked']) {
+        //     toLocation += item['departmentName'] + ',';
+        //     checkOptions += item['inspectionItemName'] + ','
+        //   }
 
-        }
-        toLocation = toLocation.substring(0, toLocation.length - 1);
-        checkOptions = checkOptions.substring(0, checkOptions.length - 1);
+        // }
+        // toLocation = toLocation.substring(0, toLocation.length - 1);
+        // checkOptions = checkOptions.substring(0, checkOptions.length - 1);
         body.set("fromLocationName", this.api.userInfo.departmentName);
-        body.set("toLocationName", toLocation);
+        body.set("toLocationName", '');
         // 用户生日放在备注最后
         body.set("note", this.comments);
-        body.set("inspectionItem", checkOptions);
+        body.set("inspectionItem", '');
         break;
         //标本运送
       case TRANSPORT_SPECIMEN:
-        let specimenType = {};
+        let specimenTypestr = '';
         for (let index in this.specimenTypes) {
           let item = this.specimenTypes[index];
           if (item['isChecked']) {
-            specimenType = item;
+            specimenTypestr += item['sampleName'] + ',';
           }
         }
         let toLocationStr = '';
@@ -562,11 +577,14 @@ export class TaskListPage {
             toLocationStr += item['departmentName'] + ',';
           }
         }
+        if(specimenTypestr) {
+          specimenTypestr = specimenTypestr.substring(0, specimenTypestr.length - 1);
+        }
         if(toLocationStr) {
           toLocationStr = toLocationStr.substring(0, toLocationStr.length - 1);
         }
         body.set("targetType", "标本");
-        body.set("transferItem", specimenType['sampleName']);
+        body.set("transferItem", specimenTypestr);
         body.set("fromLocationName", this.api.userInfo.departmentName);
         body.set("toLocationName", toLocationStr);
         break;
@@ -637,9 +655,7 @@ export class TaskListPage {
     for (let i in this.specimenTypes) {
       let item = this.specimenTypes[i];
       if (Number(i) === index) {
-        item.isChecked = true;
-      } else {
-        item.isChecked = false;
+        item.isChecked = !item.isChecked;
       }
     }
 
@@ -730,11 +746,14 @@ export class TaskListPage {
     //病人生日
     this.birthDay = '';
     this.birthForshow = '';
-    this.transportOption = '';
-    //检查项目
-    this.checkOptionArray.forEach((item, index) => {
+    this.transportTools.forEach((item, index) => {
       item['isChecked'] = false;
     });
+    this.transportOption = '';
+    //检查项目
+    // this.checkOptionArray.forEach((item, index) => {
+    //   item['isChecked'] = false;
+    // });
     //标本类型
     this.specimenTypes.forEach((item, index) => {
       item['isChecked'] = false;

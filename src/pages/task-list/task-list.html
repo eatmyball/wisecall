@@ -32,7 +32,8 @@
           <div class="div-block-bottom-border">
             <div class="div-item-row">
               <div class="div-item-row-half">
-                <div class="div-title">床号:</div>
+                <h6 style="color: red;">*</h6>
+                <div class="div-title">病床号:</div>
                 <ion-input type="text" class="my-ion-input" placeholder="请输入病人床号" [(ngModel)]="bedNum"></ion-input>
               </div>
               <div class="div-item-row-half">
@@ -59,7 +60,7 @@
                   doneText="确认"></ion-datetime>
               </div>
             </div>
-            <div class="div-checkbox-container">
+            <div *ngIf="false"  class="div-checkbox-container">
               <div class="div-title">检查项目:</div>
               <div *ngFor="let item of checkOptionArray; let i = index">
                 <ion-chip *ngIf="item.departmentName"
