@@ -90,17 +90,10 @@ export class TaskListPage {
   tolocationName: string = '';
 
   //物品运送
-  commodityArray = [{ name: '甲苯', isChecked: false }, { name: '盐酸', isChecked: false },
-  { name: '4L氧气', isChecked: false }, { name: '10L氧气', isChecked: false }, { name: '40L氧气', isChecked: false },
-  { name: 'PDA', isChecked: false }, { name: '动态包', isChecked: false }, { name: '绿盖短管', isChecked: false },
-  { name: '咽试子管', isChecked: false }, { name: '紫盖长管', isChecked: false }, { name: '监护仪', isChecked: false },
-  { name: '微波炉', isChecked: false }, { name: '红光治疗仪', isChecked: false }, { name: '微泵', isChecked: false },
-  { name: '气泵', isChecked: false }, { name: '流量表', isChecked: false }, { name: '耳温仪', isChecked: false }
-    , { name: '血培养', isChecked: false }, { name: '血箱', isChecked: false }, { name: '眼科培养', isChecked: false }
-    , { name: '气垫床', isChecked: false }, { name: '平车', isChecked: false }, { name: '轮椅', isChecked: false }
-    , { name: '甲醛', isChecked: false }, { name: '盐水送介入', isChecked: false }, { name: '造影剂（提供姓名生日）', isChecked: false }];
+  commodityDatas = [{ name: '领培养瓶', isChecked: false }, { name: '领咽试纸', isChecked: false },
+  { name: '领小便试管', isChecked: false }, { name: '领口痰杯', isChecked: false }];
+  commodityArray = [];
   isOther: boolean = false;
-  otherCommodity: string = '';
   commodityComments: string = '';
   //物品运输数量
   commodityNum: number = 0;
@@ -262,12 +255,18 @@ export class TaskListPage {
               drugType['isChecked'] = false;
             }
             this.drugTypies.push(drugType);
+          }else if(data[index]['transferType'] == '物品') {
+            let commodity = {};
+            commodity['name'] = data[index]['transferItemName'];
+            commodity['isChecked'] = false;
+            this.commodityArray.push(commodity);
           }
           
         }
       }
     }).catch(error => {
       this.specimenTypes = TRANSPORT_TOOLS;
+      this.commodityArray = this.commodityDatas;
     });
   }
 
@@ -452,9 +451,23 @@ export class TaskListPage {
   }
 
   //物品运送
-  onCommodityTransferClicked(isSend) {
-    if (this.otherCommodity && this.commodityNum) {
-      if (!isNaN(this.commodityNum)) {
+  onCommodityTransferClicked() {
+    let isSelected = false;
+    for (let index in this.commodityArray) {
+      let item = this.commodityArray[index];
+      if (item['isChecked']) {
+        isSelected = true;
+      }
+    }
+    let locationSelected = false;
+    for (let index in this.departmentList) {
+      let item = this.departmentList[index];
+      if (item['isChecked']) {
+        locationSelected = true;
+      }
+    }
+    if (isSelected) {
+      if(locationSelected) {
         this.util.showLoading('创建任务中,请稍候...');
         setTimeout(() => {
           let data = this.getTransferDataForm(TRANSPORT_COMMODITY);
@@ -469,11 +482,11 @@ export class TaskListPage {
             this.showAlert('创建失败,请稍后重试！');
           });
         }, 500);
-      } else {
-        this.showAlert('数量必须为数字!');
+      }else {
+        this.showAlert('请选择目的科室!');
       }
     } else {
-      this.showAlert('必须输入物品名称和数量!');
+      this.showAlert('必须选择一项物品!');
     }
 
   }
@@ -571,14 +584,11 @@ export class TaskListPage {
           }
         }
         let toLocationStr = '';
-        for(let index in this.specimenToDeparts) {
-          let item = this.specimenToDeparts[index];
+        for(let index in this.departmentList) {
+          let item = this.departmentList[index];
           if (item['isChecked']) {
             toLocationStr += item['departmentName'] + ',';
           }
-        }
-        if(specimenTypestr) {
-          specimenTypestr = specimenTypestr.substring(0, specimenTypestr.length - 1);
         }
         if(toLocationStr) {
           toLocationStr = toLocationStr.substring(0, toLocationStr.length - 1);
@@ -605,11 +615,32 @@ export class TaskListPage {
         break;
         //物品运送
       case TRANSPORT_COMMODITY:
+        let commodityStr = '';
+        for(let index in this.commodityArray) {
+          let item = this.commodityArray[index];
+          if (item['isChecked']) {
+            commodityStr += item['name'] + ',';
+          }
+        }
+        if(commodityStr) {
+          commodityStr = commodityStr.substring(0, commodityStr.length - 1);
+        }
+        let tolocationName = '';
+        for(let index in this.departmentList) {
+          let item = this.departmentList[index];
+          if (item['isChecked']) {
+            tolocationName += item['departmentName'] + ',';
+          }
+        }
+        if(tolocationName) {
+          tolocationName = tolocationName.substring(0, tolocationName.length - 1);
+        }
+
         body.set("targetType", "物品");
-        body.set('quatity', this.commodityNum+'');
-        body.set("transferItem", this.otherCommodity);
+        body.set('quatity', '');
+        body.set("transferItem", commodityStr);
         body.set("fromLocationName", this.api.userInfo.departmentName);
-        body.set("toLocationName", this.tolocationName);
+        body.set("toLocationName", tolocationName);
         body.set("note", this.commodityComments);
 
         break;
@@ -673,15 +704,22 @@ export class TaskListPage {
 
   }
 
+  onCommoditySelected(index) {
+    for (let i in this.commodityArray) {
+      let item = this.commodityArray[i];
+      if (Number(i) === index) {
+        item.isChecked = !item.isChecked;
+      }
+    }
+
+  }
+
     //目的科室选择
     onToDepartmentSelected(index) {
       for (let i in this.departmentList) {
         let item = this.departmentList[i];
         if (Number(i) === index) {
-          item.isChecked = true;
-          this.tolocationName = item['departmentName'];
-        } else {
-          item.isChecked = false;
+          item.isChecked = !item.isChecked;
         }
       }
     }
@@ -766,10 +804,14 @@ export class TaskListPage {
     this.commodityArray.forEach((item, index) => {
       item['isChecked'] = false;
     });
+
+    this.departmentList.forEach((item, index) => {
+      item['isChecked'] = false;
+    });
+
     this.tolocationName = '';
     //物品运送备注
     this.commodityComments = '';
-    this.otherCommodity = '';
     this.commodityNum = 0;
   }
 

@@ -170,19 +170,21 @@
             <div class="div-item-row" style="justify-content: space-between">
               <div class="div-text">物品运送</div>
             </div>
-            <div class="div-item-row">
-              <div class="div-item-row-half">
-                <div class="div-title">物品:</div>
-                <ion-input type="text" class="my-ion-input" placeholder="请输入物品名称" [(ngModel)]="otherCommodity">
-                </ion-input>
-              </div>
-              <div class="div-item-row-half">
-                <div class="div-title">数量:</div>
-                <ion-input type="number" [(ngModel)]="commodityNum" placeholder="请输入数量"></ion-input>
+            <div *ngIf="true" class="div-upload-img-content">
+              <div style="display: flex; width:100%; align-items:flex-start; justify-content: space-between;">
+                <div class="div-checkbox-container" style="border-bottom: 0px; flex:1;">
+                  <div class="div-title">物品运送:</div>
+                  <ion-chip *ngFor="let item of commodityArray; let i = index"
+                    [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
+                    (click)="onCommoditySelected(i)">
+                    {{item.name}}
+                  </ion-chip>
+                </div>
               </div>
             </div>
             <div *ngIf="true" class="div-upload-img-content">
               <div style="display: flex; width:100%; align-items:flex-start; justify-content: space-between;">
+                
                 <div class="div-to-location">
                   <div class="div-title">目的科室:</div>
                   <div *ngFor="let item of departmentList; let i = index"
@@ -191,15 +193,15 @@
                     {{item.departmentName}}
                   </div>
                 </div>
-                <div class="div-comments-btn">
+                <div *ngIf="false"  class="div-comments-btn">
                   <button ion-button small (click)="onToLocationSelected()">全部</button>
                 </div>
               </div>
             </div>
             <div class="div-comments">
               <div class="div-comments-row">
-                <div class="div-title">备注:</div>
-                <ion-input type="text" [(ngModel)]="commodityComments" placeholder="请输入备注"></ion-input>
+                <!-- <div class="div-title">备注:</div>
+                <ion-input type="text" [(ngModel)]="commodityComments" placeholder="请输入备注"></ion-input> -->
               </div>
               <div class="div-comments-btn">
                 <button ion-button small (click)="onCommodityTransferClicked()">提交</button>
@@ -267,7 +269,8 @@
                   始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;药品类型:{{item.transferItem}}
                 </div>
                 <div *ngIf="item.transferType ==='物品'" class="div-text">
-                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;物品:{{item.transferItem}}&nbsp;&nbsp;数量:{{item.quality}}
+                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;物品:{{item.transferItem}}
+                  
                 </div>
               </div>
             </div>
@@ -298,7 +301,7 @@
                   始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;药品类型:{{item.transferItem}}
                 </div>
                 <div *ngIf="item.transferType ==='物品'" class="div-text">
-                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;物品:{{item.transferItem}}&nbsp;&nbsp;数量:{{item.quality}}
+                  始发:{{item.fromLocationName}}&nbsp;&nbsp;目的:{{item.toLocationName}}&nbsp;&nbsp;物品:{{item.transferItem}}
                 </div>
               </div>
             </div>

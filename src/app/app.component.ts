@@ -98,11 +98,11 @@ export class MyApp {
   }
 
   showUpdateApkAlert() {
-    let filePath = '/storage/emulated/0/Download/wisecall.apk';
+    let filePath = '/storage/emulated/0/Download/nursepad.apk';
     this.util.showAlertWithOkhandler('版本更新','是否下载最新的客户端','取消','确认',(data)=>{
       this.util.showLoading('正在下载中，请稍候...');
       this.util.setDownloadListener(this.listener);
-      this.util.fileDownload('http://info.liontown.cn/htmprd/apk/wisecall.apk',filePath).then((fileEntry)=>{
+      this.util.fileDownload('http://cgydyy.wisebox.com.cn/file/nursepad.apk',filePath).then((fileEntry)=>{
         this.util.dismissLoading();
         console.log('下载成功:'+ JSON.stringify(fileEntry));
         this.fileOpen.open(fileEntry.toURL(),'application/vnd.android.package-archive');
