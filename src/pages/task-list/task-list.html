@@ -23,7 +23,7 @@
           病人/标本
         </ion-segment-button>
         <ion-segment-button value="RIGHT">
-          药品/物品
+          中成药/物品
         </ion-segment-button>
       </ion-segment>
       <div [ngSwitch]="taskType">
@@ -176,7 +176,7 @@
           <!--类型为药品运送-->
           <div class="div-block-bottom-border">
             <div class="div-item-row-no-border" style="justify-content: space-between">
-              <div class="div-text">药品运送</div>
+              <div class="div-text">中成药运送</div>
               <button ion-button small (click)="onDrugTransferClicked()">提交</button>
             </div>
             <div class="div-item-row-no-border" *ngIf="false">

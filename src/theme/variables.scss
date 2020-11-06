@@ -34,17 +34,17 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary: #1F8CF1, 
+  primary: #007067, 
   secondary: #969696, 
   danger: #FF4747, 
   light: #F4F6FA, 
   dark: #222, 
   light-grey: #A6BBC8, 
   blue: #1F8CF1, 
-  done-green: #24C68F, 
+  done-green: #007067, 
   text-white: #fff, 
   );
-$toolbar-background: #1F8CF1; //状态栏背景色
+$toolbar-background: #007067; //状态栏背景色
 $background-color: #FFF; //默认背景色
 
 //head bar相关修改
