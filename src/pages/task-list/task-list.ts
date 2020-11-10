@@ -485,7 +485,7 @@ export class TaskListPage {
   getTransferDataForm(transferType: string): Object {
 
     let data = { "HospitalCode": this.api.HOSPITALCODE };
-    data['PatientOld'] = 99;
+    data['PatientOld'] = 0;
     data['AssignAlertBefore'] = 5;
     data['ExecuteAlertBefore'] = 10;
     data['StandardLength'] = 15;
