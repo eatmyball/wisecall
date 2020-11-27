@@ -64,6 +64,11 @@ export class TaskListPage {
 
   //标本运送
   isEmergency: boolean = true;
+  //标本类型
+  specimenTypes = [{sampleName:'血气', isChecked:true}, {sampleName:'血', isChecked:false}, {sampleName:'液末尿', isChecked:false}, {sampleName:'脑积液', isChecked:false}
+                    ,{sampleName:'胸腹水', isChecked:false}, {sampleName:'尿便', isChecked:false}, {sampleName:'血尿痰培养', isChecked:false}, {sampleName:'血沉', isChecked:false}
+                    ,{sampleName:'G实验', isChecked:false}, {sampleName:'其他', isChecked:false}
+                  ];
 
   //送药运送表单内容
   // drugTypies = [];
@@ -535,6 +540,14 @@ export class TaskListPage {
         data['String10'] = checkOptions;
         break;
       case TRANSPORT_SPECIMEN:
+        let specimenTypestr = '';
+        for (let index in this.specimenTypes) {
+          let item = this.specimenTypes[index];
+          if (item['isChecked']) {
+            specimenTypestr += item['sampleName'] + ',';
+          }
+        }
+        data['Note'] = specimenTypestr;
         data['String12'] = this.isEmergency ? '急诊标本运送' : '平诊标本运送';
         data['FromLocation'] = this.api.userInfo['DeptName'];
         data['TargetType'] = "标本";
@@ -596,6 +609,16 @@ export class TaskListPage {
         this.transportOption = item.name;
       } else {
         item.isChecked = false;
+      }
+    }
+
+  }
+
+  onSpecimenTypesClicked(item) {
+    for (let i in this.specimenTypes) {
+      let specimen = this.specimenTypes[i];
+      if (specimen.sampleName == item.sampleName) {
+        specimen.isChecked = !specimen.isChecked;
       }
     }
 

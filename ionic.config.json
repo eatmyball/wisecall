@@ -7,7 +7,7 @@
   "proxies":[
     {
       "path": "/htmwsforpadprd",
-      "proxyUrl": "http://info.liontown.cn/htmwsforpadprd"
+      "proxyUrl": "http://info.liontown.cn/htmwsforpadprd/"
     }
   ]
 }

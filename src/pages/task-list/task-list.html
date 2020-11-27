@@ -20,10 +20,10 @@
     <div class="col-detail">
       <ion-segment [(ngModel)]="taskType">
         <ion-segment-button value="LEFT">
-          病人/标本
+          病人
         </ion-segment-button>
         <ion-segment-button value="RIGHT">
-          中成药/物品
+          中成药/标本
         </ion-segment-button>
       </ion-segment>
       <div [ngSwitch]="taskType">
@@ -127,10 +127,46 @@
               </div>
             </div>
           </div>
+          
+        </div>
+        <div *ngSwitchCase="'RIGHT'">
+          <!--类型为药品运送-->
+          <div class="div-block-bottom-border">
+            <div class="div-item-row-no-border" style="justify-content: space-between;">
+              <div class="div-text">中成药运送</div>
+              <button ion-button small (click)="onDrugTransferClicked()">提交</button>
+            </div>
+            <div style="font-size: 1.1rem; padding:10px 5px 10px 5px; color:red;"> 
+              提示：药品运送仅限 7:30-17:00 中成药运送    17:00-次日7:30 西药运送
+            </div>
+            <div class="div-item-row-no-border" *ngIf="false">
+              <div class="div-item-row-half">
+                <ion-item no-lines class="my-ion-item">
+                  <ion-label class="my-lable">预约时间</ion-label>
+                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"></ion-datetime>
+                </ion-item>
+              </div>
+              <div class="div-item-row-half">
+                <ion-item no-lines class="my-ion-item">
+                  <ion-label class="my-lable">药房</ion-label>
+
+                </ion-item>
+              </div>
+            </div>
+          </div>
+
           <!--类型为标本运送-->
           <div class="div-block-bottom-border">
+            <div class="div-checkbox-container">
+              <div class="div-title">标本运送:</div>
+              <ion-chip *ngFor="let item of specimenTypes; let i = index" [ngClass]="item.isChecked? 'div-check-item-checked':'div-check-item-default'"
+                (click)="onSpecimenTypesClicked(item)">
+                {{item.sampleName}}
+              </ion-chip>
+            </div>
+
+
             <div class="div-upload-img-content">
-              <div class="div-title">呼叫标本服务</div>
               <div class="div-action-red" *ngIf="true" (click)="onSpecimenTransport(true)">
                 <ion-icon name="ios-notifications" color="text-white"></ion-icon>
                 <div class="div-action-btn-text">急诊</div>
@@ -141,8 +177,6 @@
               </div>
             </div>
             <div class="div-transfer">
-              
-              
               <div class="div-line-container">
                 <div class="div-circle-bule"></div>
                 <div class="div-line-blue"></div>
@@ -171,31 +205,10 @@
               </div>
             </div>
           </div>
-        </div>
-        <div *ngSwitchCase="'RIGHT'">
-          <!--类型为药品运送-->
-          <div class="div-block-bottom-border">
-            <div class="div-item-row-no-border" style="justify-content: space-between">
-              <div class="div-text">中成药运送</div>
-              <button ion-button small (click)="onDrugTransferClicked()">提交</button>
-            </div>
-            <div class="div-item-row-no-border" *ngIf="false">
-              <div class="div-item-row-half">
-                <ion-item no-lines class="my-ion-item">
-                  <ion-label class="my-lable">预约时间</ion-label>
-                  <ion-datetime displayFormat="YYYY-MM-DD HH:mm" [(ngModel)]="checkDate"></ion-datetime>
-                </ion-item>
-              </div>
-              <div class="div-item-row-half">
-                <ion-item no-lines class="my-ion-item">
-                  <ion-label class="my-lable">药房</ion-label>
 
-                </ion-item>
-              </div>
-            </div>
-          </div>
+
           <!--类型为物品运送-->
-          <div class="div-block-bottom-border">
+          <div *ngIf="false" class="div-block-bottom-border">
             <div class="div-item-row" style="justify-content: space-between">
               <div class="div-text">物品运送</div>
             </div>
